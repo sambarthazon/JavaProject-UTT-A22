@@ -1,5 +1,7 @@
 package javaproject.utt.a22;
 
+import java.util.*;
+
 /**
  * Classe representant les joueurs jouant dans une partie.
  */
