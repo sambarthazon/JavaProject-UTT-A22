@@ -42,16 +42,6 @@ public class Pion{
      */
     private StatusPion status;
 
-
-
-    /**
-     * Main
-     * @param args
-     */
-    public static void main(String[] args){
-        
-    }
-
     /**
      * Enumeration du status de combat du pion.
      */
@@ -59,6 +49,22 @@ public class Pion{
         Combattant, Reserviste, Indefini;
     }
 
+    /**
+     * Strategie que le pion adaptera pour combattre (Offensif, Defensif ou Aleatoire).
+     */
+    private Strategie strategie;
+
+
+    /**
+     * Main
+     * @param args
+     */
+    public static void main(String[] args){
+        Pion pion = new Pion();
+        pion.executerStrategie();
+        pion.changerStrategie(new Defensif());
+        pion.executerStrategie();
+    }
 
 
     /**
@@ -232,10 +238,11 @@ public class Pion{
      * Methode pour changer la strategie du pion.
      * @param strategie
      */
-    public void changerStrategie(/*Strategie strategie*/){
+    public void changerStrategie(Strategie strategie){
         /*
-         * Changement de startegie du pion
+         * Changement de strategie du pion
          */
+        this.strategie = strategie;
     }
 
     /**
@@ -244,5 +251,12 @@ public class Pion{
      */
     public String /*Strategie*/ getStrategie(){
         return /*Nom de la strategie ou la strategie entiere*/"";
+    }
+
+    /**
+     * Methode pour combattre en fonction de la strategie attribuee.
+     */
+    public void executerStrategie(){
+        strategie.combattre();
     }
 }
