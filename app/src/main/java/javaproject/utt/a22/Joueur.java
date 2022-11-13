@@ -36,7 +36,7 @@ public class Joueur{
     /**
      * Attribut indiquant que le joueur est dans une partie.
      */
-    //Partie partie;
+    Partie partie;
 
     /**
      * Main
@@ -44,6 +44,30 @@ public class Joueur{
      */
     public static void main(String[] args) {
         
+    }
+
+    /**
+     * Constructeur de la classe Joueur.
+     */
+    public Joueur(){
+
+    }
+
+
+    /**
+     * Methode pour changer le status du joueur.
+     * @param status
+     */
+    public void setStatus(StatusJoueur status){
+
+    }
+
+    /**
+     * Methode pour recuperer le status du joueur.
+     * @return this.status
+     */
+    public StatusJoueur getStatus(){
+        return this.status;
     }
 
 }
