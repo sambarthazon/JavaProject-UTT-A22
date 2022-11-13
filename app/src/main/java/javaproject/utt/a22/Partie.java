@@ -15,7 +15,7 @@ public class Partie {
     /**
      * Attribut correspondant au plateau de la partie.
      */
-    //Plateau plateau;
+    Plateau plateau;
     
     /**
      * Status de la partie en cours.
@@ -63,7 +63,7 @@ public class Partie {
      * Methode pour ajouter un plateau a la partie.
      * @param plateau
      */
-    public void setPlateau(/*Plateau plateau*/){
+    public void setPlateau(Plateau plateau){
         /*
          * Ajouter le plateau a la partie.
          */
@@ -73,7 +73,7 @@ public class Partie {
      * Methode pour retirer le plateau de la partie.
      * @param plateau
      */
-    public void removePlateau(/*Plateau plateau*/){
+    public void removePlateau(Plateau plateau){
         /*
          * Retirer le plateau de la partie.
          */

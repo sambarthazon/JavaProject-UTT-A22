@@ -39,6 +39,11 @@ public class Joueur{
     Partie partie;
 
     /**
+     * Set de zone que le joueur controle.
+     */
+    Set<Zone> setZoneControlee = new HashSet<Zone>();
+
+    /**
      * Main
      * @param args
      */
@@ -51,6 +56,27 @@ public class Joueur{
      */
     public Joueur(){
 
+    }
+
+
+    /**
+     * Methode pour ajouter une zone controlee par le joueur dans le set de zone controlee (setZoneControlee).
+     * @param zone
+     */
+    public void addZoneControlee(Zone zone){
+        /*
+         * Ajout de la zone controlee.
+         */
+    }
+
+    /**
+     * Methode pour retirer une zone controlee par le joueur du set de zone controlee (setZoneControlee).
+     * @param zone
+     */
+    public void removeZoneControlee(Zone zone){
+        /*
+         * Retret de la zone controlee.
+         */
     }
 
 
