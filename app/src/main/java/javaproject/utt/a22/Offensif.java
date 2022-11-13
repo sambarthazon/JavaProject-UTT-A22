@@ -6,6 +6,14 @@ package javaproject.utt.a22;
 public class Offensif implements Strategie{
 
     /**
+     * Main
+     * @param args
+     */
+    public static void main(String[] args) {
+        
+    }
+
+    /**
      * Implementation de la methode combattre.
      */
     @Override
