@@ -14,7 +14,7 @@ public class Maitre extends Pion{
     /**
      * Constructeur de la classe Maitre.
      */
-    public Maitre(){
-
+    public Maitre(Joueur joueur){
+        super(joueur); //Pour eviter les erreurs mais a changer.
     }
 }

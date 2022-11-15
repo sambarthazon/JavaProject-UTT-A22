@@ -13,8 +13,8 @@ public class Elite extends Pion{
     /**
      * Constructeur de la classe Elite.
      */
-    public Elite(){
-
+    public Elite(Joueur joueur){
+        super(joueur); //Pour eviter les erreurs mais a changer
     }
 
 }

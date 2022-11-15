@@ -12,7 +12,9 @@ public class Zone{
     /**
      * Set de pion de la team 1 present sur la zone.
      */
-    Set<Pion> setPionTeam1 = new HashSet<Pion>();
+    Set<Pion> setPionTeam1 = new HashSet<Pion>(){
+        Joueur joueur = new Joueur();
+    };
 
     /**
      * Set de pion de la team 2 present sur la zone.
@@ -106,8 +108,8 @@ public class Zone{
      * Methode pour recuperer les ECTS de la team 1 sur la zone.
      * @return 
      */
-    public double getECTSTeam1(){
-        double ECTS = 0;
+    public int getECTSTeam1(){
+        int ECTS = 0;
         /*
          * Parcour le setPionTeam1 et additionne tous les ECTS.
          */
@@ -117,8 +119,8 @@ public class Zone{
     /**
      * Methode pour recuperer les ECTS de la team 2 sur la zone.
      */
-    public double getECTSTeam2(){
-        double ECTS = 0;
+    public int getECTSTeam2(){
+        int ECTS = 0;
         /*
          * Parcour le setPionTeam2 et additionne tous les ECTS.
          */

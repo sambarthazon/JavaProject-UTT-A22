@@ -10,6 +10,12 @@ public class Joueur{
     /*
      * List de pion (soit 20 Pion, soit 15 Etudiant, 4 Elite et 1 Maitre)
      */
+    //List<Pion> listPion = new List<Pion>();
+
+    /**
+     * Nombre de point que le joueur peut distribuer à ses pions.
+     */
+    private int point = 400;
 
     /**
      * Attribut representant l'equipe du joueur.
@@ -62,6 +68,25 @@ public class Joueur{
 
 
     /**
+     * Methode pour ajouter ou retirer des points que le joueur possede.
+     * @param point
+     */
+    public void changerPoint(int point){
+        /*
+         * Changement du nombre de point que le joueur possède.
+         */
+    }
+
+    /**
+     * Methode pour recuperer le nombre de point que le joueur possede.
+     * @return this.point
+     */
+    public int getPoint(){
+        return this.point;
+    }
+
+
+    /**
      * Methode pour ajouter une zone controlee par le joueur dans le set de zone controlee (setZoneControlee).
      * @param zone
      */
@@ -78,6 +103,27 @@ public class Joueur{
     public void removeZoneControlee(Zone zone){
         /*
          * Retret de la zone controlee.
+         */
+    }
+
+
+    /**
+     * Methode pour ajouter un pion dans la liste.
+     * @param pion
+     */
+    public void addPion(Pion pion){
+        /*
+         * Ajout du pion dans la liste.
+         */
+    }
+
+    /**
+     * Methode pour retirer un pion de la liste.
+     * @param pion
+     */
+    public void removePion(Pion pion){
+        /**
+         * Retrait du pion de la liste.
          */
     }
 

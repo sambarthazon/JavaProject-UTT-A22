@@ -7,40 +7,86 @@ package javaproject.utt.a22;
  * Classe permettant le controle du pion (combattant).
  */
 public class Pion{
+
+    /**
+     * Attribut specifiant à quel joueur appartient le pion.
+     */
+    private Joueur joueur;
+
     /**
      * L'attribut ECTS équivaut à la vie du pion, une fois à 0 notre pion meurt.
      */
-    private double ECTS = 30;
+    private int ECTS = 30;
 
     /**
      * Statistique permettant l'esquive d'une attaque ou l'atteinte de la cible lors de l'attque (0 à 10).
      */
     private int dexterite;
+    /**
+     * Valeur maximal de la dexterite.
+     */
+    private final int maxDexterite = 10;
+    /**
+     * Valeur minimale de la dexterite.
+     */
+    private final int minDexterite = 0;
 
     /**
      * Statistique de force de l'attaque. Augmente les degats de 10% par points affectes (0 à 10).
      */
     private int force;
+    /**
+     * Valeur maximale de la force.
+     */
+    private final int maxForce = 10;
+    /**
+     * Valeur minimale de la force.
+     */
+    private final int minForce = 0;
     
     /**
      * Statistique de resistance aux attaques. Augmente la resistance de 5% par points affectes (0 à 10).
      */
     private int resistance;
+    /**
+     * Valeur maximale de la resistance.
+     */
+    private final int maxResistance = 10;
+    /**
+     * Valeur minimale de la resistance.
+     */
+    private final int minResistance = 0;
     
     /**
      * Statistique de vie supplémentaire. Augmente la vie initiale du nombre de points affectes (0 à 30).
      */
     private int constitution;
+    /**
+     * Valeur maximale de la constitution.
+     */
+    private final int maxConstitution = 30;
+    /**
+     * Valeur minimale de la constitution.
+     */
+    private final int minConstitution = 0;
     
     /**
      * Statistique d'initiative. Determine quel pion attaque le premier (0 à 10).
      */
     private int initiative;
+    /**
+     * Valeur maximale de l'initiative.
+     */
+    private final int maxInitiative = 10;
+    /**
+     * Valeur minimale de l'initiative.
+     */
+    private final int minInitiative = 0;
 
     /**
      * Status de combat du pion (Combattant, Reserviste ou Indefini).
      */
-    private StatusPion status;
+    private StatusPion status = StatusPion.Indefini;
 
     /**
      * Enumeration du status de combat du pion.
@@ -56,36 +102,39 @@ public class Pion{
 
 
     /**
+     * Zone a laquelle le pion est affecte.
+     */
+    private Zone zone = null;
+
+
+    /**
      * Main
      * @param args
      */
     public static void main(String[] args){
-        Pion pion = new Pion();
-        pion.executerStrategie();
-        pion.changerStrategie(new Defensif());
-        pion.executerStrategie();
+
     }
 
 
     /**
      * Constructeur Pion
      */
-    public Pion(){
+    public Pion(Joueur joueur){
+        this.joueur = joueur;
         this.dexterite = 0;
         this.force = 0;
         this.resistance = 0;
         this.constitution = 0;
         this.initiative = 0;
-        this.status = StatusPion.Indefini;
     }
 
     /**
      * Methode pour ajouter ou retirer des ECTS au pion.
      * @param constitution
      */
-    public void changerECTS(int constitution){
+    public void changerECTS(int ECTS){
         /*
-         * Changement des ECTS s.s.i 60 > this.ECTS + constitution >= 0.
+         * Changement des ECTS s.s.i. 60 > this.ECTS + ECTS >= 0.
          */
     }
 
@@ -93,7 +142,7 @@ public class Pion{
      * Methode pour recuperer les ECTS du pion.
      * @return this.ECTS
      */
-    public double getECTS(){
+    public int getECTS(){
         return this.ECTS;
     }
 
@@ -103,9 +152,34 @@ public class Pion{
      * @param dexterite
      */
     public void changerDexterite(int dexterite){
-        /*
-         * Changement de la dexterite s.s.i. 10 > this.dexterite + dexterite > 0.
-         */
+        int var = 0; //Variable de stockage.
+
+        if(dexterite > 0){ //Test si nous ajoutons de la dexterite.
+            this.dexterite += dexterite; //Ajout des points de dexterite.
+
+            if(this.dexterite > this.maxDexterite){ //Test si apres ajout, la dexterite depasse sa capacite.
+                var = this.dexterite - this.maxDexterite; //Calcul du surplus.
+                this.dexterite = this.maxDexterite; //La dexterite ne peut pas etre superieur a 10.
+                joueur.changerPoint(-dexterite - var); //Retrait des points au joueur.
+                System.out.println("Votre pion a déjà le maximum de dextérité.");
+            } else{
+                joueur.changerPoint(-dexterite); //Retrait des points au joueur.
+            }
+
+        } else if(dexterite < 0){ //Test si nous enlevons de la dexterite.
+            var = this.dexterite; //Sauvegarde de notre ancienne dexterite.
+            this.dexterite += dexterite; //Ajout des points de dexterite.
+
+            if(this.dexterite < this.minDexterite){ //Test si apres retrait, la dexterite est en dessous de sa capacite.
+                this.dexterite = this.minDexterite; //La dexterite ne peut pas etre en dessous.
+                joueur.changerPoint(var); //Recuperation des points par le joueur.
+            } else{
+                joueur.changerPoint(dexterite); //Recuperation des points par le joueur.
+            }
+
+        } else{ //Test si nous ne faisons rien sur la dexterite.
+            System.out.println("Vous devez ajouter ou retirer des points de dextérité.");
+        }
     }
 
     /**
@@ -122,9 +196,34 @@ public class Pion{
      * @param force
      */
     public void changerForce(int force){
-        /*
-         * Changement de la force s.s.i. 10 > this.force + force > 0.
-         */
+        int var = 0; //Variable de stockage.
+
+        if(force > 0){ //Test si nous ajoutons de la force.
+            this.force += force; //Ajout des points de force.
+
+            if(this.force > this.maxForce){ //Test si apres ajout, la force depasse sa capacite.
+                var = this.force - this.maxForce; //Calcul du surplus.
+                this.force = this.maxForce; //La force ne peut pas etre superieur a sa capacite.
+                joueur.changerPoint(-force - var); //Retrait des points au joueur.
+                System.out.println("Votre pion a déjà le maximum de force.");
+            } else{
+                joueur.changerPoint(-force); //Retrait des points au joueur.
+            }
+
+        } else if(force < 0){ //Test si nous enlevons de la force.
+            var = this.force; //Sauvegarde de notre ancienne force.
+            this.force += force; //Ajout des points de force.
+
+            if(this.force < this.minForce){ //Test si apres retrait, la force est en dessous de sa capacite.
+                this.force = this.minForce; //La force ne peut pas etre en dessous de sa capacite.
+                joueur.changerPoint(var); //Recuperation des points par le joueur.
+            } else{
+                joueur.changerPoint(force); //Recuperation des points par le joueur.
+            }
+            
+        } else{ //Test si nous ne faisons rien sur la force.
+            System.out.println("Vous devez ajouter ou retirer des points de force.");
+        }
     }
 
     /**
@@ -141,9 +240,34 @@ public class Pion{
      * @param resistance
      */
     public void changerResistance(int resistance){
-        /*
-         * Changement de la resistance s.s.i. 10 > this.resistance + resistance > 0.
-         */
+        int var = 0; //Variable de stockage.
+
+        if(resistance > 0){ //Test si nous ajoutons de la resistance.
+            this.resistance += resistance; //Ajout des points de resistance.
+
+            if(this.resistance > this.maxResistance){ //Test si apres ajout, la resistance depasse sa capacite.
+                var = this.resistance - this.maxResistance; //Calcul du surplus.
+                this.resistance = this.maxResistance; //La resistance ne peut pas etre superieur a sa capacite.
+                joueur.changerPoint(-resistance - var); //Retrait des points au joueur.
+                System.out.println("Votre pion a déjà le maximum de résistance.");
+            } else{
+                joueur.changerPoint(-resistance); //Retrait des points au joueur.
+            }
+
+        } else if(resistance < 0){ //Test si nous enlevons de la resistance.
+            var = this.resistance; //Sauvegarde de notre ancienne resistance.
+            this.resistance += resistance; //Ajout des points de resistance.
+
+            if(this.resistance < this.minResistance){ //Test si apres retrait, la resistance est en dessous de sa capacite.
+                this.resistance = this.minResistance; //La resistance ne peut pas etre en dessous de sa capacite.
+                joueur.changerPoint(var); //Recuperation des points par le joueur.
+            } else{
+                joueur.changerPoint(resistance); //Recuperation des points par le joueur.
+            }
+            
+        } else{ //Test si nous ne faisons rien sur la resistance.
+            System.out.println("Vous devez ajouter ou retirer des points de résistance.");
+        }
     }
 
     /**
@@ -160,9 +284,34 @@ public class Pion{
      * @param constitution
      */
     public void changerConstitution(int constitution){
-        /*
-         * Changement de la constitution s.s.i. 30 > this.constitution + constitution > 0.
-         */
+        int var = 0; //Variable de stockage.
+
+        if(constitution > 0){ //Test si nous ajoutons de la constitution.
+            this.constitution += constitution; //Ajout des points de constitution.
+
+            if(this.constitution > this.maxConstitution){ //Test si apres ajout, la constitution depasse sa capacite.
+                var = this.constitution - this.maxConstitution; //Calcul du surplus.
+                this.constitution = this.maxConstitution; //La constitution ne peut pas etre superieur a sa capacite.
+                joueur.changerPoint(-constitution - var); //Retrait des points au joueur.
+                System.out.println("Votre pion a déjà le maximum de constitution.");
+            } else{
+                joueur.changerPoint(-constitution); //Retrait des points au joueur.
+            }
+
+        } else if(constitution < 0){ //Test si nous enlevons de la constitution.
+            var = this.constitution; //Sauvegarde de notre ancienne constitution.
+            this.constitution += constitution; //Ajout des points de constitution.
+
+            if(this.constitution < this.minConstitution){ //Test si apres retrait, la constitution est en dessous de sa capacite.
+                this.constitution = this.minConstitution; //La constitution ne peut pas etre en dessous de se capacite.
+                joueur.changerPoint(var); //Recuperation des points par le joueur.
+            } else{
+                joueur.changerPoint(constitution); //Recuperation des points par le joueur.
+            }
+            
+        } else{ //Test si nous ne faisons rien sur la constitution.
+            System.out.println("Vous devez ajouter ou retirer des points de constitution.");
+        }
     }
 
     /**
@@ -179,9 +328,34 @@ public class Pion{
      * @param initiative
      */
     public void changerInitiative(int initiative){
-        /*
-         * Changement de l'initiative s.s.i. 10 > this.initiative + initiative > 0
-         */
+        int var = 0; //Variable de stockage.
+
+        if(initiative > 0){ //Test si nous ajoutons de la initiative.
+            this.initiative += initiative; //Ajout des points d'initiative.
+
+            if(this.initiative > this.maxInitiative){ //Test si apres ajout, l'initiative depasse sa capacite.
+                var = this.initiative - this.maxInitiative; //Calcul du surplus.
+                this.initiative = this.maxInitiative; //L'initiative ne peut pas etre superieur a sa capacite.
+                joueur.changerPoint(-initiative - var); //Retrait des points au joueur.
+                System.out.println("Votre pion a déjà le maximum d'initiative.");
+            } else{
+                joueur.changerPoint(-initiative); //Retrait des points au joueur.
+            }
+
+        } else if(initiative < 0){ //Test si nous enlevons de l'initiative.
+            var = this.initiative; //Sauvegarde de notre ancienne initiative.
+            this.initiative += initiative; //Ajout des points d'initiative.
+
+            if(this.initiative < this.minInitiative){ //Test si apres retrait, l'initiative est en dessous de sa capacite.
+                this.initiative = this.minInitiative; //La initiative ne peut pas etre en dessous de sa capacite.
+                joueur.changerPoint(var); //Recuperation des points par le joueur.
+            } else{
+                joueur.changerPoint(initiative); //Recuperation des points par le joueur.
+            }
+            
+        } else{ //Test si nous ne faisons rien sur la initiative.
+            System.out.println("Vous devez ajouter ou retirer des points d'initiative.");
+        }
     }
 
     /**
@@ -198,9 +372,7 @@ public class Pion{
      * @param status
      */
     public void setStatus(StatusPion status){
-        /*
-         * Changement de status du pion
-         */
+        this.status = status;
     }
 
     /**
@@ -208,9 +380,6 @@ public class Pion{
      * @return this.status
      */
     public StatusPion getStatus(){
-        /*
-         * Recupere le status du pion.
-         */
         return this.status;
     }
 
@@ -219,7 +388,8 @@ public class Pion{
      * Methode pour changer la zone du pion.
      * @param zone
      */
-    public void changerZone(/*Zone zone*/){
+    public void changerZone(Zone zone){
+        this.zone = zone;
         /*
          * Changement de la zone du pion s.s.i. sa zone est conquise.
          */
@@ -239,9 +409,6 @@ public class Pion{
      * @param strategie
      */
     public void changerStrategie(Strategie strategie){
-        /*
-         * Changement de strategie du pion
-         */
         this.strategie = strategie;
     }
 
@@ -258,5 +425,18 @@ public class Pion{
      */
     public void executerStrategie(){
         strategie.combattre();
+    }
+
+
+    /**
+     * Methode pour parametrer un joueur au pion.
+     * @param joueur
+     */
+    public void setJoueur(Joueur joueur){
+        if(!this.joueur.equals(joueur)){
+            this.joueur.removePion(this);
+            this.joueur = joueur;
+            this.joueur.addPion(this);
+        }
     }
 }

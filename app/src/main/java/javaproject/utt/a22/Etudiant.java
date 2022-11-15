@@ -14,7 +14,7 @@ public class Etudiant extends Pion{
     /**
      * Constructeur de la classe Etudiant.
      */
-    public Etudiant(){
-
+    public Etudiant(Joueur joueur){
+        super(joueur); //Pour eviter les erreurs mais a changer
     }
 }
