@@ -13,8 +13,18 @@ public class Elite extends Pion{
     /**
      * Constructeur de la classe Elite.
      */
-    public Elite(Joueur joueur){
-        super(joueur); //Pour eviter les erreurs mais a changer
+    public Elite(Joueur joueur, String nom){
+        this.joueur = joueur;
+        this.nom = nom;
+
+        this.dexterite = 1;
+        this.force = 1;
+        this.resistance = 1;
+        this.constitution = 5;
+        this.initiative = 1;
+        this.strategie = new Offensif();
+
+        this.joueur.addPion(this);
     }
 
 }

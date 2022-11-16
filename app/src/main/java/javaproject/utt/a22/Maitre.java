@@ -14,7 +14,17 @@ public class Maitre extends Pion{
     /**
      * Constructeur de la classe Maitre.
      */
-    public Maitre(Joueur joueur){
-        super(joueur); //Pour eviter les erreurs mais a changer.
+    public Maitre(Joueur joueur, String nom){
+        this.joueur = joueur;
+        this.nom = nom;
+
+        this.dexterite = 2;
+        this.force = 2;
+        this.resistance = 2;
+        this.constitution = 10;
+        this.initiative = 2;
+        this.strategie = new Offensif();
+
+        this.joueur.addPion(this);
     }
 }

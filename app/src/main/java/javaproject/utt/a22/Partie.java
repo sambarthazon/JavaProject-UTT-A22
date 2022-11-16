@@ -10,7 +10,7 @@ public class Partie {
     /**
      * Set de joueur present dans la partie.
      */
-    Set<Joueur> setJoueur = new HashSet<Joueur>();
+    ArrayList<Joueur> arrayJoueur = new ArrayList<Joueur>();
 
     /**
      * Attribut correspondant au plateau de la partie.

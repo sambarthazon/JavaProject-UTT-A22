@@ -3,6 +3,8 @@
  */
 package javaproject.utt.a22;
 
+import java.util.Iterator;
+
 /**
  * Classe permettant le controle du pion (combattant).
  */
@@ -11,17 +13,22 @@ public class Pion{
     /**
      * Attribut specifiant à quel joueur appartient le pion.
      */
-    private Joueur joueur;
+    protected Joueur joueur;
+
+    /**
+     * Nom du pion.
+     */
+    protected String nom;
 
     /**
      * L'attribut ECTS équivaut à la vie du pion, une fois à 0 notre pion meurt.
      */
-    private int ECTS = 30;
+    protected int ECTS = 30;
 
     /**
      * Statistique permettant l'esquive d'une attaque ou l'atteinte de la cible lors de l'attque (0 à 10).
      */
-    private int dexterite;
+    protected int dexterite;
     /**
      * Valeur maximal de la dexterite.
      */
@@ -34,7 +41,7 @@ public class Pion{
     /**
      * Statistique de force de l'attaque. Augmente les degats de 10% par points affectes (0 à 10).
      */
-    private int force;
+    protected int force;
     /**
      * Valeur maximale de la force.
      */
@@ -47,7 +54,7 @@ public class Pion{
     /**
      * Statistique de resistance aux attaques. Augmente la resistance de 5% par points affectes (0 à 10).
      */
-    private int resistance;
+    protected int resistance;
     /**
      * Valeur maximale de la resistance.
      */
@@ -60,7 +67,7 @@ public class Pion{
     /**
      * Statistique de vie supplémentaire. Augmente la vie initiale du nombre de points affectes (0 à 30).
      */
-    private int constitution;
+    protected int constitution;
     /**
      * Valeur maximale de la constitution.
      */
@@ -73,7 +80,7 @@ public class Pion{
     /**
      * Statistique d'initiative. Determine quel pion attaque le premier (0 à 10).
      */
-    private int initiative;
+    protected int initiative;
     /**
      * Valeur maximale de l'initiative.
      */
@@ -98,7 +105,7 @@ public class Pion{
     /**
      * Strategie que le pion adaptera pour combattre (Offensif, Defensif ou Aleatoire).
      */
-    private Strategie strategie;
+    protected Strategie strategie;
 
 
     /**
@@ -112,20 +119,41 @@ public class Pion{
      * @param args
      */
     public static void main(String[] args){
+        Partie partie = new Partie();
 
+        for(int i = 0; i<2; i++){
+            Joueur joueur = new Joueur(partie, "Joueur "+i);
+            partie.arrayJoueur.add(joueur);
+        }
+
+        for(int i = 1; i<16; i++){
+            Pion pion = new Etudiant(partie.arrayJoueur.get(0), "Etudiant "+i);
+            partie.arrayJoueur.get(0).arrayPion.add(pion); //A enlever une fois la methode addPion de la classe Joueur faite.
+        }
+
+        for(int i = 1; i<6; i++){
+            Pion pion = new Elite(partie.arrayJoueur.get(0), "Elite "+i);
+            partie.arrayJoueur.get(0).arrayPion.add(pion); //A enlever une fois la methode addPion de la classe Joueur faite.
+        }
+
+        Pion pion = new Maitre(partie.arrayJoueur.get(0), "Maitre");
+        partie.arrayJoueur.get(0).arrayPion.add(pion);
+
+        Iterator<Pion> it = partie.arrayJoueur.get(0).arrayPion.iterator();
+        while(it.hasNext()){
+            Pion p = it.next();
+            p.changerConstitution(20);
+            p.changerStrategie(new Aleatoire());
+            System.out.println(p);
+        }
     }
 
 
     /**
      * Constructeur Pion
      */
-    public Pion(Joueur joueur){
-        this.joueur = joueur;
-        this.dexterite = 0;
-        this.force = 0;
-        this.resistance = 0;
-        this.constitution = 0;
-        this.initiative = 0;
+    public Pion(){
+
     }
 
     /**
@@ -369,10 +397,29 @@ public class Pion{
 
     /**
      * Methode pour changer le status de combat du pion.
+     * Verification du status souhaite puis verification du nombre de pion sous ce status.
      * @param status
      */
     public void setStatus(StatusPion status){
-        this.status = status;
+        if(status == StatusPion.Combattant){
+            int var = 0;
+            Iterator<Pion> it = this.joueur.arrayPion.iterator();
+            while(it.hasNext()){
+                Pion pion = it.next();
+                if(pion.status == StatusPion.Combattant){
+                    var++;
+                }
+            }
+            if(var > 15){
+                System.out.println("Vous avez trop de combattant.");
+            } else{
+                this.status = StatusPion.Combattant;
+            }
+        } else if(status == StatusPion.Reserviste){
+            this.status = StatusPion.Reserviste;
+        } else{
+            System.out.println("Votre pion ne peut que être un Combattant ou un Reserviste.");
+        }
     }
 
     /**
@@ -386,13 +433,21 @@ public class Pion{
 
     /**
      * Methode pour changer la zone du pion.
+     * Verification si nous changeons avec la meme zone. Si non, enlever le pion de la zone et mettre la nouvelle zone au pion.
      * @param zone
      */
     public void changerZone(Zone zone){
-        this.zone = zone;
-        /*
-         * Changement de la zone du pion s.s.i. sa zone est conquise.
-         */
+        if(this.zone.equals(zone)){
+            System.out.println("Ce pion appartient déjà à cette zone.");
+        } else{
+            this.zone.removePion(this);
+            this.zone = null;
+        }
+
+        if(this.zone == null){
+            this.zone = zone;
+            this.zone.addPion(this);
+        }
     }
 
     /**
@@ -416,8 +471,8 @@ public class Pion{
      * Methode pour recuperer la strategie du pion.
      * @return
      */
-    public String /*Strategie*/ getStrategie(){
-        return /*Nom de la strategie ou la strategie entiere*/"";
+    public String getStrategie(){
+        return this.strategie.getNom();
     }
 
     /**
@@ -430,13 +485,36 @@ public class Pion{
 
     /**
      * Methode pour parametrer un joueur au pion.
+     * Verification si nous settons avec le meme joueur. Si non, enelever le pion du joueur et mettre le nouveau joueur au pion.
      * @param joueur
      */
     public void setJoueur(Joueur joueur){
-        if(!this.joueur.equals(joueur)){
+        if(this.joueur.equals(joueur)){
+            System.out.println("Ce pion appartient déjà à ce joueur.");
+        } else{
             this.joueur.removePion(this);
+            this.joueur = null;
+        }
+
+        if(this.joueur == null){
             this.joueur = joueur;
             this.joueur.addPion(this);
         }
+    }
+
+
+    /**
+     * Redefinition de la methode toString
+     * @return
+     */
+    @Override
+    public String toString(){
+        return this.nom + " {\n\tECTS = " + this.ECTS + ", Stratégie = " + this.strategie + ", Zone = " + this.zone +
+                            "\n\tDextérité = " + this.dexterite +
+                            ", Force = " + this.force +
+                            ", Résistance = " + this.resistance +
+                            ", Constitution = " + this.constitution +
+                            ", Initiative = " + this.initiative +
+                            "\n}";
     }
 }

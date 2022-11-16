@@ -12,14 +12,12 @@ public class Zone{
     /**
      * Set de pion de la team 1 present sur la zone.
      */
-    Set<Pion> setPionTeam1 = new HashSet<Pion>(){
-        Joueur joueur = new Joueur();
-    };
+    LinkedList<Pion> linkedPionTeam1 = new LinkedList<Pion>();
 
     /**
      * Set de pion de la team 2 present sur la zone.
      */
-    Set<Pion> setPionTeam2 = new HashSet<Pion>();
+    LinkedList<Pion> linkedPionTeam2 = new LinkedList<Pion>();
 
     /**
      * Attribut correspondant au nom de la zone.
@@ -63,44 +61,33 @@ public class Zone{
 
 
     /**
-     * Methode pour ajouter le pion au set de pion de la team 1 de la zone.
+     * Methode pour ajouter le pion a la liste du joueur 1 ou 2.
      * @param pion
      */
-    public void addPionTeam1(Pion pion){
+    public void addPion(Pion pion){
         /*
          * Ajouter le pion au set de pion de la team 1 de la zone.
          */
     }
 
     /**
-     * Methode pour retirer le pion du set de pion de la team 1 de la zone.
+     * Methode pour retirer le pion de la list du joueur 1 ou 2.
      * @param pion
      */
-    public void RemovePionTeam1(Pion pion){
-        /*
-         * Retirer le pion du set de pion de la team 1 de la zone.
-         */
-    }
-
-
-    /**
-     * Methode pour ajouter le pion au set de pion de la team 2 de la zone.
-     * @param pion
-     */
-    public void addPionTeam2(Pion pion){
-        /*
-         * Ajouter le pion au set de pion de la team 2 de la zone.
-         */
-    }
-
-    /**
-     * Methode pour retirer le pion du set de pion de la team 2 de la zone.
-     * @param pion
-     */
-    public void RemovePionTeam2(Pion pion){
-        /*
-         * Retirer le pion du set de pion de la team 2 de la zone.
-         */
+    public void removePion(Pion pion){
+        if(pion.joueur.getNom() == "Joueur 1"){
+            if(this.linkedPionTeam1.contains(pion)){
+                this.linkedPionTeam1.remove(pion);
+            } else{
+                System.out.println("Ce pion n'est pas dans la liste.");
+            }
+        } else if(pion.joueur.getNom() == "Joueur 2"){
+            if(this.linkedPionTeam2.contains(pion)){
+                this.linkedPionTeam2.remove(pion);
+            } else{
+                System.out.println("Ce pion n'est pas dans la liste.");
+            }
+        }
     }
 
 

@@ -9,4 +9,19 @@ public interface Strategie{
      * Methode permettant au pion de combattre.
      */
     public void combattre();
+
+
+    /**
+     * Methode pour recuperer le nom de la strategie.
+     * @return this.nom
+     */
+    public String getNom();
+
+
+    /**
+     * Redefinition de la methode toString
+     * @return this.nom
+     */
+    @Override
+    public String toString();
 }
