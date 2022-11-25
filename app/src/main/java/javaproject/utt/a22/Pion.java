@@ -3,7 +3,7 @@
  */
 package javaproject.utt.a22;
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Classe permettant le controle du pion (combattant).
@@ -23,7 +23,15 @@ public class Pion{
     /**
      * L'attribut ECTS équivaut à la vie du pion, une fois à 0 notre pion meurt.
      */
-    protected int ECTS = 30;
+    protected int ECTS = this.ECTSDefault;
+    /**
+     * 
+     */
+    protected final int ECTSDefault = 30;
+    /**
+     * 
+     */
+    protected int ECTSMax = this.ECTSDefault + this.constitution;
 
     /**
      * Statistique permettant l'esquive d'une attaque ou l'atteinte de la cible lors de l'attque (0 à 10).
@@ -143,9 +151,15 @@ public class Pion{
         while(it.hasNext()){
             Pion p = it.next();
             p.changerConstitution(20);
-            p.changerStrategie(new Aleatoire());
+            p.changerStrategie(new Defensif());
             System.out.println(p);
         }
+
+        Pion pionActeur = partie.arrayJoueur.get(0).arrayPion.get(15);
+        Pion pionCible = partie.arrayJoueur.get(0).arrayPion.get(0);
+        pionActeur.executerStrategie(pionCible);
+
+        System.out.println(pionCible);
     }
 
 
@@ -158,12 +172,21 @@ public class Pion{
 
     /**
      * Methode pour ajouter ou retirer des ECTS au pion.
-     * @param constitution
+     * @param ECTS
      */
     public void changerECTS(int ECTS){
-        /*
-         * Changement des ECTS s.s.i. 60 > this.ECTS + ECTS >= 0.
-         */
+        if(ECTS > 0){
+            this.ECTS += ECTS;
+            if(this.ECTS > this.ECTSMax){
+                this.ECTS = this.ECTSMax;
+            }
+        } else if(ECTS < 0){
+            this.ECTS += ECTS;
+            if(this.ECTS < 0){
+                System.out.println("Le pion " + this + " est mort.");
+                this.zone.removePion(this);
+            }
+        }
     }
 
     /**
@@ -340,6 +363,8 @@ public class Pion{
         } else{ //Test si nous ne faisons rien sur la constitution.
             System.out.println("Vous devez ajouter ou retirer des points de constitution.");
         }
+
+        this.ECTSMax = this.ECTSDefault + this.constitution;
     }
 
     /**
@@ -478,8 +503,8 @@ public class Pion{
     /**
      * Methode pour combattre en fonction de la strategie attribuee.
      */
-    public void executerStrategie(){
-        strategie.combattre();
+    public void executerStrategie(Pion pionCible){
+        strategie.combattre(this, pionCible);
     }
 
 

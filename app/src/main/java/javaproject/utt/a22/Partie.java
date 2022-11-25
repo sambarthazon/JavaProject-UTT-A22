@@ -29,6 +29,14 @@ public class Partie {
         Parametrage, Treve, Combat, Terminee;
     }
 
+
+    /**
+     * Constructeur de la classe Partie.
+     */
+    public Partie(){
+
+    }
+
     /**
      * Main
      * @param args

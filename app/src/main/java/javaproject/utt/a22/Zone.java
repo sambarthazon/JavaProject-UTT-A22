@@ -78,12 +78,14 @@ public class Zone{
         if(pion.joueur.getNom() == "Joueur 1"){
             if(this.linkedPionTeam1.contains(pion)){
                 this.linkedPionTeam1.remove(pion);
+                pion.changerZone(null);
             } else{
                 System.out.println("Ce pion n'est pas dans la liste.");
             }
         } else if(pion.joueur.getNom() == "Joueur 2"){
             if(this.linkedPionTeam2.contains(pion)){
                 this.linkedPionTeam2.remove(pion);
+                pion.changerZone(null);
             } else{
                 System.out.println("Ce pion n'est pas dans la liste.");
             }
