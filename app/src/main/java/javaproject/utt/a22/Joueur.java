@@ -83,6 +83,7 @@ public class Joueur{
         /*
          * Changement du nombre de point que le joueur possède.
          */
+        this.point += point;
     }
 
     /**
@@ -120,6 +121,9 @@ public class Joueur{
      * @param pion
      */
     public void addPion(Pion pion){
+        if(!this.arrayPion.contains(pion)){
+            this.arrayPion.add(pion);
+        }
         /*
          * Ajout du pion dans la liste.
          */
@@ -130,6 +134,9 @@ public class Joueur{
      * @param pion
      */
     public void removePion(Pion pion){
+        if(this.arrayPion.contains(pion)){
+            this.arrayPion.remove(pion);
+        }
         /**
          * Retrait du pion de la liste.
          */
@@ -159,5 +166,14 @@ public class Joueur{
      */
     public String getNom(){
         return this.nom;
+    }
+
+
+    /**
+     * Methode pour recuperer la partie du joueur.
+     * @return
+     */
+    public Partie getPartie(){
+        return this.partie;
     }
 }

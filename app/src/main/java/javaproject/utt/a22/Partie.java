@@ -34,7 +34,7 @@ public class Partie {
      * Constructeur de la classe Partie.
      */
     public Partie(){
-
+        this.status = StatusPartie.Parametrage;
     }
 
     /**
