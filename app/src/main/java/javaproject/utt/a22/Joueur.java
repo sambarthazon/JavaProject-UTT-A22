@@ -76,14 +76,19 @@ public class Joueur{
 
 
     /**
-     * Methode pour ajouter ou retirer des points que le joueur possede.
+     * Methode pour ajouter des points au joueur.
      * @param point
      */
-    public void changerPoint(int point){
-        /*
-         * Changement du nombre de point que le joueur possède.
-         */
+    public void ajouterPoint(int point){
         this.point += point;
+    }
+
+    /**
+     * Methode pour retirer des point au joueur.
+     * @param point
+     */
+    public void retirerPoint(int point){
+        this.point -= point;
     }
 
     /**

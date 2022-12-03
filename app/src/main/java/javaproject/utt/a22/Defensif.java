@@ -37,7 +37,7 @@ public class Defensif implements Strategie{
             heal = (int) y * (10 + pionCible.constitution);
         }
 
-        pionCible.changerECTS(heal);
+        pionCible.setECTS(heal);
 
         return heal;
     }

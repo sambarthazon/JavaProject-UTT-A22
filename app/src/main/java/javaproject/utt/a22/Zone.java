@@ -74,9 +74,9 @@ public class Zone{
             System.out.println(itBefore.next());
         }
 
-        pion1.changerInitiative(3);
-        pion2.changerInitiative(8);
-        pion3.changerInitiative(7);
+        pion1.setInitiative(3);
+        pion2.setInitiative(8);
+        pion3.setInitiative(7);
 
         zone.sortLinkedPion();
 
@@ -116,14 +116,14 @@ public class Zone{
         if(pion.joueur.getNom() == "Joueur 1"){
             if(this.linkedPionTeam1.contains(pion)){
                 this.linkedPionTeam1.remove(pion);
-                pion.changerZone(null);
+                pion.setZone(null);
             } else{
                 System.out.println("Ce pion n'est pas dans la liste.");
             }
         } else if(pion.joueur.getNom() == "Joueur 2"){
             if(this.linkedPionTeam2.contains(pion)){
                 this.linkedPionTeam2.remove(pion);
-                pion.changerZone(null);
+                pion.setZone(null);
             } else{
                 System.out.println("Ce pion n'est pas dans la liste.");
             }
