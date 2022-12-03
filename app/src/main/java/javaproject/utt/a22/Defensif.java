@@ -22,7 +22,7 @@ public class Defensif implements Strategie{
      * Implementation de la methode combattre.
      */
     @Override
-    public int combattre(Pion pionActeur, Pion pionCible){
+    public void combattre(Pion pionActeur, Pion pionCible){
         final int max = 100;
         final int min = 0;
         int heal = 0;
@@ -35,11 +35,9 @@ public class Defensif implements Strategie{
             double y = 0;
             y = Math.floor(Math.random()*(0.6-0+1)+0);
             heal = (int) y * (10 + pionCible.constitution);
+
+            pionCible.setECTS(heal);
         }
-
-        pionCible.setECTS(heal);
-
-        return heal;
     }
 
     

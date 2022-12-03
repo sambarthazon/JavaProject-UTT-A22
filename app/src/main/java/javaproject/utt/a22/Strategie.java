@@ -8,7 +8,7 @@ public interface Strategie{
     /**
      * Methode permettant au pion de combattre.
      */
-    public int combattre(Pion pionActeur, Pion pionCible);
+    public void combattre(Pion pionActeur, Pion pionCible);
 
 
     /**
