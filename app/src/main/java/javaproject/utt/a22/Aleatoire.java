@@ -14,7 +14,7 @@ public class Aleatoire implements Strategie{
      * Main
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         
     }
 
@@ -22,8 +22,20 @@ public class Aleatoire implements Strategie{
      * Implementation de la methode combattre.
      */
     @Override
-    public void combattre(Pion pionActeur, Pion pionCible){
-        
+    public void combattre(Pion pionActeur){
+        //Une chance sur deux pour etre attaquant ou defenseur.
+        double trueFalse = Math.round(Math.random());
+
+        if(trueFalse == 1){ //Attaquant
+            pionActeur.setStrategie(new Offensif());
+            pionActeur.executerStrategie();
+        } else{ //Defenseur
+            pionActeur.setStrategie(new Defensif());
+            pionActeur.executerStrategie();
+        }
+
+        //Remise de la strategie de base du pion
+        pionActeur.setStrategie(new Aleatoire());
     }
 
 

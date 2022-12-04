@@ -22,34 +22,48 @@ public class Offensif implements Strategie{
      * Implementation de la methode combattre.
      */
     @Override
-    public void combattre(Pion pionActeur, Pion pionCible){
+    public void combattre(Pion pionActeur){
         //
-        final int max = 100;
-        final int min = 0;
+        int x = 0;
+        final int x_Min = 0;
+        final int x_Max = 100;
 
         //
         final int degatReference = 10;
 
         //
+        double varFuncMin = 0;
+        double varFuncMax = 0;
+
+        //Degats que va subir le pion cible.
         int damage = 0;
-        double varMin = 0;
-        double varMax = 0;
 
-        int x = 0;
-        x = (int) Math.floor(Math.random()*(max-min+1)+min);
-        Boolean reussi = x >= 0 && x <= 40 + 3 * pionActeur.dexterite ? true : false;
+        //Generation d'un nombre aleatoire entre 0 et 100.
+        x = (int) Math.floor(Math.random()*(x_Max-x_Min+1)+x_Min);
+        Boolean reussi = x >= 0 && x <= 40 + 3 * pionActeur.getDexterite() ? true : false;
 
+        //Si l'attaque est reussi.
         if(reussi){
+            //Recuperation du pion qui a le moins de point de vie de l'adversaire.
+            Pion pionCible = getPionCible(pionActeur);
+
             double y = 0;
             y = Math.floor(Math.random()*(1-0+1)+0);
 
-            varMin = min(pionActeur.getForce(), pionCible.getResistance());
-            varMax = max(varMin);
+            varFuncMin = min(pionActeur.getForce(), pionCible.getResistance());
+            varFuncMax = max(varFuncMin);
 
-            double coefDegat = varMax/100;
+            double coefDegat = varFuncMax/100;
+            //Calcul des degats qui vont etre appliques.
             damage = (int) (y * (1 + coefDegat) * degatReference);
             
+            //Application des degats sur le pion cible.
             pionCible.setECTS(-damage);
+
+            //Si le pionCible n'a plus de vie.
+            if(pionCible.getECTS() <= 0){
+                pionCible.joueur.partie.pionMort(pionCible);
+            }
         }
     }
 
@@ -61,14 +75,14 @@ public class Offensif implements Strategie{
      * @return
      */
     public double min(int forceActeur, int resistanceCible){
-        final int valueToCompare = 100;
-        int var = 0;
+        final int valeurComparaison = 100;
+        int valeurAComparer = 0;
 
-        var = 10 * forceActeur - 5 * resistanceCible;
-        if(var < valueToCompare){
-            return var;
+        valeurAComparer = 10 * forceActeur - 5 * resistanceCible;
+        if(valeurAComparer < valeurComparaison){
+            return valeurAComparer;
         } else{
-            return valueToCompare;
+            return valeurComparaison;
         }
     }
 
@@ -78,14 +92,32 @@ public class Offensif implements Strategie{
      * @param varMin
      * @return
      */
-    public double max(double varMin){
-        final int valueToCompare = 0;
+    public double max(double valeurAComparer){
+        final int valeurComparaison = 0;
 
-        if(varMin > valueToCompare){
-            return varMin;
+        if(valeurAComparer > valeurComparaison){
+            return valeurAComparer;
         } else{
-            return valueToCompare;
+            return valeurComparaison;
         }
+    }
+
+
+    /**
+     * Methode pour savoir quel pion sera effecte par la strategie.
+     * @param pionActeur
+     * @return pionCible
+     */
+    public Pion getPionCible(Pion pionActeur){
+        Pion pionCible = null;
+
+        if(pionActeur.joueur.getNom().equals("Joueur 1")){
+            pionCible = pionActeur.getZone().getLinkedListTeam2().getFirst();
+        } else{
+            pionCible = pionActeur.getZone().getLinkedListTeam1().getFirst();
+        }
+
+        return pionCible;
     }
 
 

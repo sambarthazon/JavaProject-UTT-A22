@@ -19,25 +19,52 @@ public class Defensif implements Strategie{
     }
 
     /**
-     * Implementation de la methode combattre.
+     * Implémentation de la méthode combattre.
      */
     @Override
-    public void combattre(Pion pionActeur, Pion pionCible){
-        final int max = 100;
-        final int min = 0;
+    public void combattre(Pion pionActeur){
+        //
+        int x = 0;
+        final int x_Min = 0;
+        final int x_Max = 100;
+
+        //
         int heal = 0;
 
-        int x = 0;
-        x = (int) Math.floor(Math.random()*(max-min+1)+min);
+
+        x = (int) Math.floor(Math.random()*(x_Max-x_Min+1)+x_Min);
         Boolean reussi = x >= 0 && x <= 20 + 6 * pionActeur.dexterite ? true : false;
 
         if(reussi){
+            //Recuperation du joueur qui a le moins de point de vie de son equipe.
+            Pion pionCible = getPionCible(pionActeur);
+
             double y = 0;
             y = Math.floor(Math.random()*(0.6-0+1)+0);
+
             heal = (int) y * (10 + pionCible.constitution);
 
+            //Application du soin sur le pion cible.
             pionCible.setECTS(heal);
         }
+    }
+
+
+    /**
+     * Methode pour savoir quel pion sera effecte par la strategie.
+     * @param pionActeur
+     * @return pionCible
+     */
+    public Pion getPionCible(Pion pionActeur){
+        Pion pionCible = null;
+
+        if(pionActeur.joueur.getNom().equals("Joueur 1")){
+            pionCible = pionActeur.getZone().getLinkedListTeam1().getFirst();
+        } else{
+            pionCible = pionActeur.getZone().getLinkedListTeam2().getFirst();
+        }
+
+        return pionCible;
     }
 
     

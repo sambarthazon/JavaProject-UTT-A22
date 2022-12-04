@@ -5,8 +5,6 @@ package javaproject.utt.a22;
 
 import java.util.*;
 
-import javaproject.utt.a22.Partie.StatusPartie;
-
 /**
  * Classe permettant le controle du pion (combattant).
  */
@@ -130,18 +128,6 @@ public class Pion{
             Pion etudiant = new Etudiant(joueur, "Etudiant "+i);
             joueur.addPion(etudiant);
         }
-
-        joueur.arrayPion.get(0).setDexterite(10);
-        joueur.arrayPion.get(0).setStrategie(new Defensif());
-        System.out.println(joueur.arrayPion.get(0));
-
-        joueur.arrayPion.get(1).setConstitution(10);
-        joueur.arrayPion.get(1).setECTS(-20);
-        System.out.println(joueur.arrayPion.get(1));
-
-        joueur.arrayPion.get(0).executerStrategie(joueur.arrayPion.get(1));
-
-        System.out.println(joueur.arrayPion.get(1));
     }
 
 
@@ -407,8 +393,8 @@ public class Pion{
      * @return
      * FONCTIONNEL
      */
-    public String /*Zone*/ getZone(){
-        return /*Nom de la zone ou la zone entiere*/"";
+    public Zone getZone(){
+        return this.zone;
     }
 
 
@@ -434,8 +420,8 @@ public class Pion{
      * Methode pour combattre en fonction de la strategie attribuee.
      * FONCTIONNEL
      */
-    public void executerStrategie(Pion pionCible){
-        strategie.combattre(this, pionCible);
+    public void executerStrategie(){
+        this.strategie.combattre(this);
     }
 
 

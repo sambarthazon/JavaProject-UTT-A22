@@ -22,13 +22,6 @@ public class Partie {
      */
     StatusPartie status;
 
-    /**
-     * Enumeration des status possible pour la partie.
-     */
-    enum StatusPartie{
-        Parametrage, Treve, Combat, Terminee;
-    }
-
 
     /**
      * Constructeur de la classe Partie.
@@ -67,6 +60,13 @@ public class Partie {
     }
 
 
+    public void pionMort(Pion pion){
+        /*
+         * Enlever le pion de toute collection.
+         */
+    }
+
+
     /**
      * Methode pour ajouter un plateau a la partie.
      * @param plateau
@@ -93,9 +93,7 @@ public class Partie {
      * @param status
      */
     public void setStatus(StatusPartie status){
-        /*
-         * Changement de status de la partie.
-         */
+        this.status = status;
     }
 
     /**
