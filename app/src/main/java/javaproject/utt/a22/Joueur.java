@@ -6,14 +6,14 @@ import java.util.*;
  * Classe representant les joueurs jouant dans une partie.
  */
 public class Joueur{
-    
-    /*
-     * List de pion (soit 20 Pion, soit 15 Etudiant, 4 Elite et 1 Maitre)
-     */
-    ArrayList<Pion> arrayPion = new ArrayList<Pion>();
 
     /**
-     * Nom du joueur (utile pour les teams 1 et 2).
+     * Attribut indiquant la partie du joueur.
+     */
+    private Partie partie;
+
+    /**
+     * Nom du joueur (predefini en "Joueur 1" et "Joueur 2").
      */
     private String nom;
 
@@ -21,40 +21,35 @@ public class Joueur{
      * Nombre de point que le joueur peut distribuer à ses pions.
      */
     private int point = 400;
+    /**
+     * Nombre maximum de point que le joueur peut avoir.
+     */
+    private final int maxPoint = 400;
+    /**
+     * Nombre minimum de point que le joueur peut avoir.
+     */
+    private final int minPoint = 0;
 
     /**
-     * Attribut representant l'equipe du joueur.
+     * Attribut indiquant l'equipe que le joueur represente.
      */
-    Equipe equipe;
+    private NomEquipe equipe;
 
     /**
-     * Enumeration des equipes disponibles pour le joueur.
+     * Attribut indiquant le status du joueur (Preparation ou Ready).
      */
-    enum Equipe{
-        A2I, GI, GM, ISI, MM, MTE, RT;
-    }
+    private StatusJoueur status;
+    
+    /*
+     * Liste des pions du joueur.
+     */
+    private ArrayList<Pion> arrayPion = new ArrayList<Pion>();
 
     /**
-     * Attribut representant le status du joueur.
+     * Liste des zones controlee par le joueur.
      */
-    StatusJoueur status;
+    private Set<Zone> setZoneControlee = new HashSet<Zone>();
 
-    /**
-     * Enumeration des status du joueur.
-     */
-    enum StatusJoueur{
-        Ready, Preparation;
-    }
-
-    /**
-     * Attribut indiquant que le joueur est dans une partie.
-     */
-    Partie partie;
-
-    /**
-     * Set de zone que le joueur controle.
-     */
-    Set<Zone> setZoneControlee = new HashSet<Zone>();
 
     /**
      * Main
@@ -63,6 +58,14 @@ public class Joueur{
     public static void main(String[] args) {
         
     }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                      Constructeur                    //
+    //                                                      //
+    //******************************************************//
 
     /**
      * Constructeur de la classe Joueur.
@@ -75,20 +78,67 @@ public class Joueur{
     }
 
 
+
+    //******************************************************//
+    //                                                      //
+    //                          Nom                         //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour recuperer le nom du joueur.
+     * @return this.nom
+     */
+    public String getNom(){
+        return this.nom;
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                         Partie                       //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour recuperer la partie du joueur.
+     * @return this.partie
+     */
+    public Partie getPartie(){
+        return this.partie;
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                       Points                         //
+    //                                                      //
+    //******************************************************//
+
     /**
      * Methode pour ajouter des points au joueur.
+     * Le nombre de point que le joueur possede (point) ne peut pas etre superieur le maximum fixe (maxPoint).
      * @param point
      */
     public void ajouterPoint(int point){
         this.point += point;
+        if(this.point > this.maxPoint){
+            this.point = this.maxPoint;
+        }
     }
 
     /**
      * Methode pour retirer des point au joueur.
+     * Le nombre de point que le joueur possede (point) ne peut pas etre inferieur au minimum fixe (minPoint).
      * @param point
      */
     public void retirerPoint(int point){
         this.point -= point;
+        if(this.point < this.minPoint){
+            this.point = this.minPoint;
+        }
     }
 
     /**
@@ -100,60 +150,45 @@ public class Joueur{
     }
 
 
+
+    //******************************************************//
+    //                                                      //
+    //                        Equipe                        //
+    //                                                      //
+    //******************************************************//
+
     /**
-     * Methode pour ajouter une zone controlee par le joueur dans le set de zone controlee (setZoneControlee).
-     * @param zone
+     * Methode pour changer l'equipe du joueur.
+     * Les equipes sont visibles dans l'enumeration "NomEquipe".
+     * @param equipe
      */
-    public void addZoneControlee(Zone zone){
-        /*
-         * Ajout de la zone controlee.
-         */
+    public void setEquipe(NomEquipe equipe){
+        this.equipe = equipe;
     }
 
     /**
-     * Methode pour retirer une zone controlee par le joueur du set de zone controlee (setZoneControlee).
-     * @param zone
+     * Methode pour recuperer l'equipe du joueur.
+     * @return this.equipe
      */
-    public void removeZoneControlee(Zone zone){
-        /*
-         * Retret de la zone controlee.
-         */
+    public NomEquipe getEquipe(){
+        return this.equipe;
     }
 
 
-    /**
-     * Methode pour ajouter un pion dans la liste.
-     * @param pion
-     */
-    public void addPion(Pion pion){
-        if(!this.arrayPion.contains(pion)){
-            this.arrayPion.add(pion);
-        }
-        /*
-         * Ajout du pion dans la liste.
-         */
-    }
 
-    /**
-     * Methode pour retirer un pion de la liste.
-     * @param pion
-     */
-    public void removePion(Pion pion){
-        if(this.arrayPion.contains(pion)){
-            this.arrayPion.remove(pion);
-        }
-        /**
-         * Retrait du pion de la liste.
-         */
-    }
-
+    //******************************************************//
+    //                                                      //
+    //                         Status                       //
+    //                                                      //
+    //******************************************************//
 
     /**
      * Methode pour changer le status du joueur.
+     * Les status sont visibles dans l'enumeration "StatusJoueur".
      * @param status
      */
     public void setStatus(StatusJoueur status){
-
+        this.status = status;
     }
 
     /**
@@ -165,20 +200,75 @@ public class Joueur{
     }
 
 
+
+    //******************************************************//
+    //                                                      //
+    //                          Pion                        //
+    //                                                      //
+    //******************************************************//
+
     /**
-     * Methode pour recuperer le nom du joueur.
-     * @return
+     * Methode pour ajouter un pion dans la liste.
+     * Verification que la liste du joueur ne contient pas deja ce pion.
+     * @param pion
      */
-    public String getNom(){
-        return this.nom;
+    public void addPion(Pion pion){
+        if(!this.arrayPion.contains(pion)){
+            this.arrayPion.add(pion);
+        }
+    }
+
+    /**
+     * Methode pour retirer un pion de la liste.
+     * Verification que la liste du joueur contient se pion.
+     * @param pion
+     */
+    public void removePion(Pion pion){
+        if(this.arrayPion.contains(pion)){
+            this.arrayPion.remove(pion);
+        }
+    }
+
+    /**
+     * Methode pour recuperer la liste de pion que le joueur possede.
+     * @return this.arrayPion
+     */
+    public ArrayList<Pion> getListPion(){
+        return this.arrayPion;
     }
 
 
+
+    //******************************************************//
+    //                                                      //
+    //                          Zone                        //
+    //                                                      //
+    //******************************************************//
+
     /**
-     * Methode pour recuperer la partie du joueur.
-     * @return
+     * Methode pour ajouter une zone controlee par le joueur dans le set de zone controlee (setZoneControlee).
+     * @param zone
      */
-    public Partie getPartie(){
-        return this.partie;
+    public void addZoneControlee(Zone zone){
+        this.setZoneControlee.add(zone);
+    }
+
+    /**
+     * Methode pour retirer une zone controlee par le joueur du set de zone controlee (setZoneControlee).
+     * Verification que la liste des zones contient cette zone.
+     * @param zone
+     */
+    public void removeZoneControlee(Zone zone){
+        if(this.setZoneControlee.contains(zone)){
+            this.setZoneControlee.remove(zone);
+        }
+    }
+
+    /**
+     * Methode pour recuperer les zones que le joueur possede.
+     * @return this.setZoneControlee
+     */
+    public Set<Zone> getZoneControlee(){
+        return this.setZoneControlee;
     }
 }

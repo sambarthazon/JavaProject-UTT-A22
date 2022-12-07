@@ -62,7 +62,7 @@ public class Offensif implements Strategie{
 
             //Si le pionCible n'a plus de vie.
             if(pionCible.getECTS() <= 0){
-                pionCible.joueur.partie.pionMort(pionCible);
+                pionCible.joueur.getPartie().pionMort(pionCible);
             }
         }
     }
