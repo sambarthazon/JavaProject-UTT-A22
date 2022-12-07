@@ -1,11 +1,11 @@
 package javaproject.utt.a22;
 
-public class Preferentiel implements Strategie{
+public class Preferentielle implements Strategie{
     
     /**
      * Nom de la strategie.
      */
-    private final String nom = "Préférentiel";
+    private final String nom = "Préférentielle";
     
     /**
      * Main
@@ -44,7 +44,7 @@ public class Preferentiel implements Strategie{
         }
 
         //Remise de la strategie de base du pion
-        pionActeur.setStrategie(new Preferentiel());
+        pionActeur.setStrategie(new Preferentielle());
     }
 
 

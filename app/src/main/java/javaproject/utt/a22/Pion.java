@@ -282,6 +282,10 @@ public class Pion{
         //Si nous sommes au debut de la partie, notre pion aura tous ses points de vie.
         if(this.joueur.getPartie().getStatus() == StatusPartie.Parametrage){
             this.ECTS = this.ECTSMax;
+        } else if(this.joueur.getPartie().getStatus() == StatusPartie.Treve){
+            if(this.ECTS > this.ECTSMax){
+                this.ECTS = this.ECTSMax;
+            }
         }
     }
 
@@ -440,6 +444,14 @@ public class Pion{
             this.joueur = joueur;
             this.joueur.addPion(this);
         }
+    }
+
+    /**
+     * Methode pour recuprer le joueur du pion.
+     * @return this.joueur
+     */
+    public Joueur getJoueur(){
+        return this.joueur;
     }
 
 

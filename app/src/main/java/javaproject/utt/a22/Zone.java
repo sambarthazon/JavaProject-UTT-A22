@@ -70,6 +70,8 @@ public class Zone extends Thread{
     public Zone(Partie partie, NomZone nomZone){
         this.partie = partie;
         this.nom = nomZone;
+
+        this.partie.addZone(this);
     }
 
 
@@ -242,7 +244,7 @@ public class Zone extends Thread{
         this.sortLinkedPionTeam1();
         this.sortLinkedPionTeam2();
 
-        while(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0 && this.partie.status.equals(StatusPartie.Combat)){
+        while(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0 && this.partie.getStatus().equals(StatusPartie.Combat)){
 
             System.out.println(this.nom);
             this.linkedPionTeam1.get(0).setECTS(-5);
