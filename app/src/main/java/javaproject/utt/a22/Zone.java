@@ -5,34 +5,34 @@ import java.util.*;
 public class Zone extends Thread{
 
     /**
-     * List de pion de la team 1 present sur la zone.
+     * Attribut indiquant la partie de la zone.
      */
-    private LinkedList<Pion> linkedPionTeam1 = new LinkedList<Pion>();
+    private Partie partie;
 
     /**
-     * List de pion de la team 2 present sur la zone.
-     */
-    private LinkedList<Pion> linkedPionTeam2 = new LinkedList<Pion>();
-
-    /**
-     * List de pion de la zone.
-     */
-    private LinkedList<Pion> linkedPion = new LinkedList<Pion>();
-
-    /**
-     * Attribut correspondant au nom de la zone.
+     * Attribut indiquant le nom de la zone.
      */
     private NomZone nom;
 
     /**
-     * Attribut correspondant au status de la zone.
+     * Attribut indiquant le status de la zone.
      */
     private StatusZone status;
 
     /**
-     * Attribut correspondant a la partie de la zone.
+     * Liste de pion de la zone (triee par initiative par ordre decroissant).
      */
-    private Partie partie;
+    private LinkedList<Pion> linkedPion = new LinkedList<Pion>();
+
+    /**
+     * Liste de pion de la team 1 present sur la zone (triee par ECTS par ordre decroissant).
+     */
+    private LinkedList<Pion> linkedPionTeam1 = new LinkedList<Pion>();
+
+    /**
+     * Liste de pion de la team 2 present sur la zone (triee par ECTS par ordre decroissant).
+     */
+    private LinkedList<Pion> linkedPionTeam2 = new LinkedList<Pion>();
 
 
     /**
@@ -40,29 +40,16 @@ public class Zone extends Thread{
      * @param args
      */
     public static void main(String[] args) {
-        Partie partie = new Partie();
-
-        Joueur joueur = new Joueur(partie, "Joueur 1");
-
-        Zone zoneBU = new Zone(partie, NomZone.BU);
-        Zone zoneBDE = new Zone(partie, NomZone.BDE);
-        Zone zoneQA = new Zone(partie, NomZone.QuartierAdmin);
-
-        Pion pion1 = new Etudiant(joueur, "Etudiant 1");
-        Pion pion2 = new Etudiant(joueur, "Etudiant 2");
-        Pion pion3 = new Etudiant(joueur, "Etudiant 3");
-
-        zoneBU.addPion(pion1);
-        zoneBDE.addPion(pion2);
-        zoneQA.addPion(pion3);
-
-        partie.setStatus(StatusPartie.Combat);
-
-        zoneBU.start();
-        zoneBDE.start();
-        zoneQA.start();
+        
     }
 
+
+
+    //******************************************************//
+    //                                                      //
+    //                      Constructeur                    //
+    //                                                      //
+    //******************************************************//
 
     /**
      * Constructeur de la classe Zone.
@@ -75,41 +62,141 @@ public class Zone extends Thread{
     }
 
 
+
+    //******************************************************//
+    //                                                      //
+    //                        Partie                        //
+    //                                                      //
+    //******************************************************//
+
     /**
-     * Methode pour ajouter le pion a la liste du joueur 1 ou 2.
+     * Methode pour recuperer la partie de la zone.
+     * @return this.partie
+     */
+    public Partie getPartie(){
+        return this.partie;
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                        Nom                           //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour recuperer le nom de la zone.
+     * @return this.nom
+     */
+    public NomZone getNomZone(){
+        return this.nom;
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                        Status                        //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour changer le status de la zone.
+     * Les status sont visibles dans l'enumeration "StatusZone".
+     * @param status
+     */
+    public void setStatus(StatusZone status){
+        this.status = status;
+    }
+
+    /**
+     * Methode pour recuperer le status de la zone.
+     * @return this.status
+     */
+    public StatusZone getStatus(){
+        return this.status;
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                         Pions                        //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour ajouter le pion a la liste globale (linkedPion).
+     * Si le pion appartient au "Joueur 1", ajout de ce pion dans sa liste.
+     * Si le pion appartient au "Joueur 2", ajout de ce pion dans sa liste.
      * @param pion
      */
     public void addPion(Pion pion){
         if(!this.linkedPion.contains(pion)){
             this.linkedPion.add(pion);
         }
-        if(!this.linkedPionTeam1.contains(pion)){
-            this.linkedPionTeam1.add(pion);
+
+        if(pion.getJoueur().getNom().equals("Joueur 1")){
+            if(!this.linkedPionTeam1.contains(pion)){
+                this.linkedPionTeam1.add(pion);
+            }
+        } else if(pion.getJoueur().getNom().equals("Joueur 2")){
+            if(!this.linkedPionTeam2.contains(pion)){
+                this.linkedPionTeam2.add(pion);
+            }
         }
     }
 
     /**
-     * Methode pour retirer le pion de la list du joueur 1 ou 2.
+     * Methode pour retirer le pion de la zone.
+     * Cela retirera le pion de "linkedPion" et "linkedPionTeam1" ou "linkedPionTeam2".
      * @param pion
      */
     public void removePion(Pion pion){
-        if(pion.joueur.getNom() == "Joueur 1"){
+        if(pion.getJoueur().getNom().equals("Joueur 1")){
             if(this.linkedPionTeam1.contains(pion)){
                 this.linkedPionTeam1.remove(pion);
-                pion.setZone(null);
-            } else{
-                System.out.println("Ce pion n'est pas dans la liste.");
             }
-        } else if(pion.joueur.getNom() == "Joueur 2"){
+        } else if(pion.getJoueur().getNom().equals("Joueur 2")){
             if(this.linkedPionTeam2.contains(pion)){
                 this.linkedPionTeam2.remove(pion);
-                pion.setZone(null);
-            } else{
-                System.out.println("Ce pion n'est pas dans la liste.");
             }
+        }
+
+        if(this.linkedPion.contains(pion)){
+            this.linkedPion.remove(pion);
+            pion.setZone(null);
         }
     }
 
+
+
+    //******************************************************//
+    //                                                      //
+    //                        Global                        //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour trier la liste de la zone par initiative (plus grand au plus petit).
+     */
+    public void sortLinkedPion(){
+        Collections.sort(linkedPion, new Comparator<Pion>(){
+            @Override
+            public int compare(Pion p1, Pion p2){
+                return p2.initiative - p1.initiative;
+            }
+        });
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                        Team 1                        //
+    //                                                      //
+    //******************************************************//
 
     /**
      * Methode pour recuperer les ECTS de la team 1 sur la zone.
@@ -129,6 +216,34 @@ public class Zone extends Thread{
     }
 
     /**
+     * Methode pour recuperer la liste des pions de la team 1.
+     * @return this.linkedPionTeam1
+     */
+    public LinkedList<Pion> getLinkedListTeam1(){
+        return this.linkedPionTeam1;
+    }
+
+    /**
+     * Methode pour trier la liste de la team 1 par ECTS (plus petit au plus grand).
+     */
+    public void sortLinkedPionTeam1(){
+        Collections.sort(linkedPionTeam1, new Comparator<Pion>(){
+            @Override
+            public int compare(Pion p1, Pion p2){
+                return p1.ECTS - p2.ECTS;
+            }
+        });
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                        Team 2                        //
+    //                                                      //
+    //******************************************************//
+
+    /**
      * Methode pour recuperer les ECTS de la team 2 sur la zone.
      */
     public int getECTSTeam2(){
@@ -144,64 +259,12 @@ public class Zone extends Thread{
         return ECTSTotal;
     }
 
-
-    /**
-     * Methode pour recuperer la liste des pions de la team 1.
-     * @return this.linkedPionTeam1
-     */
-    public LinkedList<Pion> getLinkedListTeam1(){
-        return this.linkedPionTeam1;
-    }
-
     /**
      * Methode pour recuperer la liste des pions de la team 2.
      * @return this.linkedPionTeam2
      */
     public LinkedList<Pion> getLinkedListTeam2(){
         return this.linkedPionTeam2;
-    }
-
-
-    /**
-     * Methode pour recuperer le nom de la zone.
-     * @return this.nom
-     */
-    public NomZone getNomZone(){
-        return this.nom;
-    }
-
-
-    /**
-     * Methode pour changer le status de la zone.
-     * @param status
-     */
-    public void setStatus(StatusZone status){
-        /*
-         * Changement du status de la zone uniquement si les conditions le permettent (plus de pions d'une des equipes ...).
-         */
-    }
-
-    /**
-     * Methode pour recuperer le status de la zone.
-     * @return this.status
-     * FONCTIONNEL
-     */
-    public StatusZone getStatus(){
-        return this.status;
-    }
-
-
-    /**
-     * Methode pour trier la liste de la team 1 par ECTS (plus petit au plus grand).
-     * FONCTIONNEL
-     */
-    public void sortLinkedPionTeam1(){
-        Collections.sort(linkedPionTeam1, new Comparator<Pion>(){
-            @Override
-            public int compare(Pion p1, Pion p2){
-                return p1.ECTS - p2.ECTS;
-            }
-        });
     }
 
     /**
@@ -217,20 +280,17 @@ public class Zone extends Thread{
         });
     }
 
+    
+
+    //******************************************************//
+    //                                                      //
+    //                        Combat                        //
+    //                                                      //
+    //******************************************************//
+
     /**
-     * Methode pour trier la liste de la zone par initiative (plus grand au plus petit).
-     * FONCTIONNEL
+     * Methode pour lancer la methode run pour le multi-threading.
      */
-    public void sortLinkedPion(){
-        Collections.sort(linkedPion, new Comparator<Pion>(){
-            @Override
-            public int compare(Pion p1, Pion p2){
-                return p2.initiative - p1.initiative;
-            }
-        });
-    }
-
-
     public void combattre(){
         this.start();
     }
@@ -239,32 +299,34 @@ public class Zone extends Thread{
      * Methode pour lancer le combat de la zone.
      */
     public void run(){
-
         this.sortLinkedPion();
         this.sortLinkedPionTeam1();
         this.sortLinkedPionTeam2();
 
-        while(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0 && this.partie.getStatus().equals(StatusPartie.Combat)){
+        while(true){
+            Iterator<Pion> it = this.linkedPion.iterator();
+            while(it.hasNext()){
+                Pion pionActeur = it.next();
+                pionActeur.executerStrategie();
+                this.sortLinkedPionTeam1();
+                this.sortLinkedPionTeam2();
 
-            System.out.println(this.nom);
-            this.linkedPionTeam1.get(0).setECTS(-5);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                if(this.getECTSTeam1() <= 0){
+                    System.out.println("La team 2 possede la zone.");
+                    this.status = StatusZone.Controlee;
+                    break;
+                } else if(this.getECTSTeam2() <= 0){
+                    System.out.println("La team 1 possede la zone.");
+                    this.status = StatusZone.Controlee;
+                    break;
+                }
+            }
+
+            if(this.status.equals(StatusZone.Controlee)){
+                break;
             }
         }
-
-        /*
-        Iterator<Pion> it = this.linkedPion.iterator();
-        while(it.hasNext()){
-            Pion pionActeur = it.next();
-            pionActeur.executerStrategie();
-            this.sortLinkedPionTeam1();
-            this.sortLinkedPionTeam2();
-        }
-        */
+        this.partie.verifierFinPartie();
     }
 
 }
