@@ -38,7 +38,7 @@ public class Joueur{
     /**
      * Attribut indiquant le status du joueur (Preparation ou Ready).
      */
-    private StatusJoueur status;
+    private StatusJoueur status = StatusJoueur.Preparation;
     
     /*
      * Liste des pions du joueur.
