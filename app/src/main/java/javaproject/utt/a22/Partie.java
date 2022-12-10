@@ -23,7 +23,7 @@ public class Partie {
     /**
      * Liste des zone dans la partie.
      */
-    private Set<Zone> setZone = new HashSet<Zone>();
+    private ArrayList<Zone> arrayZone = new ArrayList<Zone>();
 
 
     /**
@@ -61,12 +61,10 @@ public class Partie {
         Zone zoneHI = new Zone(partie, NomZone.HalleIndus);
         Zone zoneHS = new Zone(partie, NomZone.HalleSport);
 
-        System.out.println("Partie.");
-
         Iterator<Joueur> itJoueur = partie.arrayJoueur.iterator();
         while(itJoueur.hasNext()){
             Joueur joueurActif = itJoueur.next();
-            partie.phaseParametrage(joueurActif);
+            partie.phaseParametrage(joueurActif, new Scanner(System.in));
         }
     }
 
@@ -103,7 +101,7 @@ public class Partie {
         this.status = status;
         if(this.status.equals(StatusPartie.Combat)){
             Zone zone = null;
-            Iterator<Zone> it = this.setZone.iterator();
+            Iterator<Zone> it = this.arrayZone.iterator();
             while(it.hasNext()){
                 zone = it.next();
                 zone.start();
@@ -162,7 +160,9 @@ public class Partie {
      * @param zone
      */
     public void addZone(Zone zone){
-        this.setZone.add(zone);
+        if(!this.arrayZone.contains(zone)){
+            this.arrayZone.add(zone);
+        }
     }
 
     /**
@@ -171,8 +171,8 @@ public class Partie {
      * @param zone
      */
     public void removeZone(Zone zone){
-        if(this.setZone.contains(zone)){
-            this.setZone.remove(zone);
+        if(this.arrayZone.contains(zone)){
+            this.arrayZone.remove(zone);
         }
     }
 
@@ -180,8 +180,8 @@ public class Partie {
      * Methode pour recuperer la liste de zones de la partie.
      * @return
      */
-    public Set<Zone> getListZone(){
-        return this.setZone;
+    public ArrayList<Zone> getListZone(){
+        return this.arrayZone;
     }
 
 
@@ -236,36 +236,19 @@ public class Partie {
     /**
      * Methode pour le parametrage des pions en phase de "Parametrage".
      */
-    public void phaseParametrage(Joueur joueur){
-        /**
-         * Affichage a l'utilisateur des pions qu'il possede.
-         * Demande a l'utilisateur s'il veut faire des modifications.
-         * Possibilitees : changement de zone, attribution de stats, changement de strategie,
-         * changement de status du pion, changement du status du joueur.
-         */
+    public void phaseParametrage(Joueur joueur, Scanner sc){
         while(joueur.getStatus().equals(StatusJoueur.Preparation)){
             System.out.println(joueur.getListPion());
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Voici vos pions, voulez-vous faire des modifications ?\nTapez Y pour Oui et N pour Non");
+            System.out.print("Voulez-vous faire des modifications sur vos pions ?\nOui(Y), Non(N) : ");
             String input = sc.nextLine();
-            // if(input.equals("Y")){
-            //     this.selectionPion(joueur);
-            // } else if(input.equals("N")){
-            //     this.parametrageStatusJoueur(joueur);
-            // } else{
-            //     System.out.println("Invalide");
-            // }
-            /*switch(input){
-                case "Y":
-                    this.selectionPion(joueur);
-                    break;
-                case "N":
-                    this.parametrageStatusJoueur(joueur);
-                    break;
-                default:
-                    break;
-            }*/
-            sc.close();
+
+            if(input.equals("Y")){
+                this.selectionPion(joueur, new Scanner(System.in));
+            } else if(input.equals("N")){
+                this.parametrageStatusJoueur(joueur);
+            } else{
+                System.out.println("Invalide");
+            }
         }
         
     }
@@ -288,85 +271,338 @@ public class Partie {
     /**
      * Methode pour permetre au joueur de selectionner le pion a parametrer.
      */
-    public void selectionPion(Joueur joueur){
-        /**
-         * Demande a l'utilisateur quel pion il veut parametrer.
-         * Il devra renseigner son nom exact afin de selectionner le bon pion dans la liste du joueur.
-         * Une fois le pion obtenu, appel de la methode "parametragePion".
-         */
+    public void selectionPion(Joueur joueur, Scanner sc){
+        Pion pion = null;
+
+        while(true){
+            PreSet.clearConsole();
+            System.out.println(joueur.getListPion());
+
+            System.out.print("Quel pion voulez-vous modifier ? (Entrez son nom ou \'0\' pour quitter) : ");
+            String input = sc.nextLine();
+
+            //Si le joueur decide de quitter.
+            if(input.equals("0")){
+                break;
+            }
+
+            pion = joueur.getListPion().get(this.findPion(joueur, input));
+            if(!pion.equals(null)){
+                System.out.println("Points qu'il vous reste a attribuer : " + joueur.getPoint());
+                this.parametragePion(joueur, pion, new Scanner(System.in));
+            } else{
+                System.out.println("Ce pion n'existe pas.");
+            }
+        }
     }
 
+    /**
+     * 
+     * @param joueur
+     * @param str
+     * @return index
+     */
+    public int findPion(Joueur joueur, String str){
+        int index = 0;
+        Pion pion = null;
+
+        Iterator<Pion> it = joueur.getListPion().iterator();
+        while(it.hasNext()){
+            pion = it.next();
+            if(pion.getNom().equals(str)){
+                index = joueur.getListPion().indexOf(pion);
+                break;
+            }
+        }
+        return index;
+    }
 
     /**
      * Methode pour le parametrage du pion.
+     * @param joueur
      * @param pion
      */
-    public void parametragePion(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur quel parametrage il veut faire sur le pion qu'il a choisi.
-         * Possibilites : zone, strategie, dexterite, constitution, force, initiative resistance.
-         */
+    public void parametragePion(Joueur joueur, Pion pion, Scanner sc){
+        while(true){
+            PreSet.clearConsole();
+            System.out.println(pion);
+            System.out.println("Point restant a distribuer : " + joueur.getPoint());
+
+            System.out.print("Modification de Dexterite(1), Force(2), Resistance(3), Constitution(4), Initiative(5), " +
+                                "Status(6), Strategie(7), Zone(8),  Quitter(0) : ");
+            int choix = sc.nextInt();
+            
+            switch(choix){
+                case 1:
+                    this.parametrageDexterite(pion, new Scanner(System.in));
+                    break;
+                case 2:
+                    this.parametrageForce(pion, new Scanner(System.in));
+                    break;
+                case 3:
+                    this.parametrageResistance(pion, new Scanner(System.in));
+                    break;
+                case 4:
+                    this.parametrageConstitution(pion, new Scanner(System.in));
+                    break;
+                case 5:
+                    this.parametrageInitiative(pion, new Scanner(System.in));
+                    break;
+                case 6:
+                    this.parametrageStatusPion(pion, new Scanner(System.in));
+                    break;
+                case 7:
+                    this.parametrageStrategie(pion, new Scanner(System.in));
+                    break;
+                case 8:
+                    this.parametrageZone(pion);
+                    break;
+                case 0:
+                    choix = 0;
+                    break;
+                default:
+                    break;
+            }
+            //Si le joueur a fini le parametrage de ce pion.
+            if(choix == 0){
+                break;
+            }
+        }
     }
 
     /**
      * 
      * @param pion
      */
-    public void parametrageDexterite(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur combien de dexterite il veut ajouter au pion.
-         */
+    public void parametrageDexterite(Pion pion, Scanner sc){
+        int dexterite = 0;
+
+        System.out.println("Dexterite actuelle de votre pion : " + pion.getDexterite());
+        while(true){
+            System.out.print("Combien de points de dexterite voulez-vous lui mettre ?" +
+                            "(Valeur entre " + pion.getMinDexterite() + " et " + pion.getMaxDexterite() + ") : ");
+            dexterite = sc.nextInt();
+
+            if(dexterite >= pion.getMinDexterite() && dexterite <= pion.getMaxDexterite()){
+                break;
+            }
+        }
+
+        pion.setDexterite(dexterite);
     }
 
-    public void parametrageForce(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur combien de force il veut ajouter au pion.
-         */
+    /**
+     * 
+     * @param pion
+     */
+    public void parametrageForce(Pion pion, Scanner sc){
+        int force = 0;
+
+        System.out.println("Force actuelle de votre pion : " + pion.getForce());
+        while(true){
+            System.out.print("Combien de points de force voulez-vous lui mettre ?" +
+                            "(Valeur entre " + pion.getMinForce() + " et " + pion.getMaxForce() + ") : ");
+            force = sc.nextInt();
+
+            if(force >= pion.getMinForce() && force <= pion.getMaxForce()){
+                break;
+            }
+        }
+
+        pion.setForce(force);
     }
 
-    public void parametrageResistance(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur combien de resistance il veut ajouter au pion.
-         */
+    /**
+     * 
+     * @param pion
+     */
+    public void parametrageResistance(Pion pion, Scanner sc){
+        int resistance = 0;
+
+        System.out.println("Resistance actuelle de votre pion : " + pion.getResistance());
+        while(true){
+            System.out.print("Combien de points de resistance voulez-vous lui mettre ?" +
+                            "(Valeur entre " + pion.getMinResistance() + " et " + pion.getMaxResistance() + ") : ");
+            resistance = sc.nextInt();
+
+            if(resistance >= pion.getMinResistance() && resistance <= pion.getMaxResistance()){
+                break;
+            }
+        }
+
+        pion.setResistance(resistance);
     }
 
-    public void parametrageConstitution(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur combien de constitution il veut ajouter au pion.
-         */
+    /**
+     * 
+     * @param pion
+     */
+    public void parametrageConstitution(Pion pion, Scanner sc){
+        int constitution = 0;
+
+        System.out.println("Constitution actuelle de votre pion : " + pion.getConstitution());
+        while(true){
+            System.out.print("Combien de points de constitution voulez-vous lui mettre ?" +
+                            "(Valeur entre " + pion.getMinConstitution() + " et " + pion.getMaxConstitution() + ") : ");
+            constitution = sc.nextInt();
+
+            if(constitution >= pion.getMinConstitution() && constitution <= pion.getMaxConstitution()){
+                break;
+            }
+        }
+
+        pion.setConstitution(constitution);
     }
 
-    public void parametrageInitiative(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur combien d'initiative il veut ajouter au pion.
-         */
+    /**
+     * 
+     * @param pion
+     */
+    public void parametrageInitiative(Pion pion, Scanner sc){
+        int inititative = 0;
+
+        System.out.println("Inititative actuelle de votre pion : " + pion.getInitiative());
+        while(true){
+            System.out.print("Combien de points d'initiative voulez-vous lui mettre ?" +
+                            "(Valeur entre " + pion.getMinInitiative() + " et " + pion.getMaxInitiative() + ") : ");
+            inititative = sc.nextInt();
+
+            if(inititative >= pion.getMinInitiative() && inititative <= pion.getMaxInitiative()){
+                break;
+            }
+        }
+
+        pion.setInitiative(inititative);
     }
 
-    public void parametrageStatusPion(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur quel status il veut mettre au pion.
-         */
+    /**
+     * 
+     * @param pion
+     */
+    public void parametrageStatusPion(Pion pion, Scanner sc){
+        int status = 0;
+
+        System.out.println("Status actuel de votre pion : " + pion.getStatus());
+        while(true){
+            System.out.print("Quel status voulez-vous lui mettre ? Combattant(1), Reserviste(2) : ");
+            status = sc.nextInt();
+
+            if(status == 1 || status == 2){
+                break;
+            }
+        }
+
+        switch(status){
+            case 1:
+                pion.setStatus(StatusPion.Combattant);
+                if(pion.getStatus().equals(StatusPion.Indefini)){
+                    System.out.println("Vous avez trop de combattants.");
+                }
+                break;
+            case 2:
+                pion.setStatus(StatusPion.Reserviste);
+                break;
+            default:
+                break;
+        }
     }
 
-    public void parametrageStrategie(Joueur joueur, Pion pion){
-        /**
-         * Demande a l'utilisateur quel strategie il veut mettre au pion.
-         */
+    /**
+     * 
+     * @param pion
+     */
+    public void parametrageStrategie(Pion pion, Scanner sc){
+        int strategie = 0;
+
+        System.out.println("Strategie actuelle de votre pion : " + pion.getStrategie());
+        while(true){
+            System.out.print("Strategie : Offensif(1), Defensif(2), Aleatoire(3), Preferentielle(4)\n" +
+                                "Aide(9), Quitter(0) : ");
+            strategie = sc.nextInt();
+
+            if(strategie >= 1 && strategie <= 4 || strategie == 9 || strategie == 0){
+                break;
+            }
+        }
+
+        switch(strategie){
+            case 1:
+                pion.setStrategie(new Offensif());
+                break;
+            case 2:
+                pion.setStrategie(new Defensif());
+                break;
+            case 3:
+                pion.setStrategie(new Aleatoire());
+                break;
+            case 4:
+                pion.setStrategie(new Preferentielle());
+                break;
+            case 9:
+                System.out.println("Strategie \'Offensif\' : Votre pion attaquera l'adversaire tous les tours." +
+                                    "\nStrategie \'Defensif\' : Votre pion soignera vos pions tous les tours." +
+                                    "\nStrategie \'Aleatoire\' : Votre pion attaquera ou soignera de maniere aleatoire." +
+                                    "\nStrategie \'Preferentielle\' : Votre pion attaquera si votre equipe a plus de points de vie " +
+                                    "ou soignera si votre equipe a moins de point de vie que l'adversaire.");
+                break;
+            case 0:
+                break;
+            default:
+                break;
+        }
     }
 
-    public void parametrageZone(Joueur joueur, Pion pion){
+    /**
+     * A REVOIR
+     * @param pion
+     */
+    public void parametrageZone(Pion pion){
         /**
          * Demande a l'utilisateur la zone d'affectation du pion.
          */
     }
 
-    public StatusJoueur parametrageStatusJoueur(Joueur joueur){
-        /**
-         * Check si tous les pre-requis sont present pour le mettre "Ready".
-         * Est-ce qu'il a 15 combattants et 5 reservistes ?
-         * Est-ce que les 15 combattants ont une zone ?
-         * Est ce que les 15 combattants ont une strategie ?
-         */
-        return joueur.getStatus();
+    /**
+     * 
+     * @param joueur
+     * @return
+     */
+    public void parametrageStatusJoueur(Joueur joueur){
+        Pion pion = null;
+        ArrayList<Pion> pionsCombattant = new ArrayList<>();
+        ArrayList<Pion> pionsStrategie = new ArrayList<>();
+        ArrayList<Pion> pionsZone = new ArrayList<>();
+
+        Iterator<Pion> itForStatus = joueur.getListPion().iterator();
+        while(itForStatus.hasNext()){
+            pion = itForStatus.next();
+            if(pion.getStatus().equals(StatusPion.Combattant)){
+                if(!pionsCombattant.contains(pion)){
+                    pionsCombattant.add(pion);
+                }
+            }
+        }
+
+        Iterator<Pion> itForStrategieZone = joueur.getListPion().iterator();
+        while(itForStrategieZone.hasNext()){
+            pion = itForStrategieZone.next();
+
+            if(!pion.getStrategie().equals(null)){
+                if(!pionsStrategie.contains(pion)){
+                    pionsStrategie.add(pion);
+                }
+            }
+            if(!pion.getZone().equals(null)){
+                if(!pionsZone.contains(pion)){
+                    pionsZone.add(pion);
+                }
+            }
+        }
+
+        if(pionsCombattant.size() == pionsStrategie.size() && pionsCombattant.size() == pionsZone.size()){
+            joueur.setStatus(StatusJoueur.Ready);
+        } else{
+            System.out.println("Il vous manque des parametrages a faire.");
+        }
     }
 }

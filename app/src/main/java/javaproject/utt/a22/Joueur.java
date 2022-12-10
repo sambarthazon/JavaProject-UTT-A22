@@ -238,6 +238,22 @@ public class Joueur{
     }
 
 
+    public int getNbCombattant(){
+        int nbCombattant = 0;
+        Pion pion = null;
+
+        Iterator<Pion> it = this.arrayPion.iterator();
+        while(it.hasNext()){
+            pion = it.next();
+            if(pion.getStatus().equals(StatusPion.Combattant)){
+                nbCombattant ++;
+            }
+        }
+
+        return nbCombattant;
+    }
+
+
 
     //******************************************************//
     //                                                      //

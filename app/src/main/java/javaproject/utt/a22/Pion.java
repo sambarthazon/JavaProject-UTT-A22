@@ -1,11 +1,9 @@
 package javaproject.utt.a22;
 
-import java.util.*;
-
 /**
  * Classe permettant le controle du pion (combattant).
  */
-public class Pion{
+public abstract class Pion{
 
     /**
      * Attribut indiquant a quel joueur appartient le pion.
@@ -34,71 +32,31 @@ public class Pion{
      * Statistique permettant l'esquive d'une attaque ou l'atteinte de la cible lors de l'attque (0 à 10).
      */
     protected int dexterite;
-    /**
-     * Valeur maximal de la dexterite.
-     */
-    private final int maxDexterite = 10;
-    /**
-     * Valeur minimale de la dexterite.
-     */
-    private final int minDexterite = 0;
 
     /**
      * Statistique de force de l'attaque. Augmente les degats de 10% par points affectes (0 à 10).
      */
     protected int force;
-    /**
-     * Valeur maximale de la force.
-     */
-    private final int maxForce = 10;
-    /**
-     * Valeur minimale de la force.
-     */
-    private final int minForce = 0;
     
     /**
      * Statistique de resistance aux attaques. Augmente la resistance de 5% par points affectes (0 à 10).
      */
     protected int resistance;
-    /**
-     * Valeur maximale de la resistance.
-     */
-    private final int maxResistance = 10;
-    /**
-     * Valeur minimale de la resistance.
-     */
-    private final int minResistance = 0;
     
     /**
      * Statistique de vie supplémentaire. Augmente la vie initiale du nombre de points affectes (0 à 30).
      */
     protected int constitution;
-    /**
-     * Valeur maximale de la constitution.
-     */
-    private final int maxConstitution = 30;
-    /**
-     * Valeur minimale de la constitution.
-     */
-    private final int minConstitution = 0;
     
     /**
      * Statistique d'initiative. Determine quel pion attaque le premier (0 à 10).
      */
     protected int initiative;
-    /**
-     * Valeur maximale de l'initiative.
-     */
-    private final int maxInitiative = 10;
-    /**
-     * Valeur minimale de l'initiative.
-     */
-    private final int minInitiative = 0;
 
     /**
      * Status de combat du pion (Combattant, Reserviste ou Indefini).
      */
-    private StatusPion status = StatusPion.Indefini;
+    protected StatusPion status = StatusPion.Indefini;
 
     /**
      * Strategie que le pion adaptera pour combattre (Offensif, Defensif, Aleatoire ou Preferentielle).
@@ -108,7 +66,7 @@ public class Pion{
     /**
      * Zone a laquelle le pion est affecte.
      */
-    private Zone zone = null;
+    protected Zone zone = null;
 
 
     /**
@@ -210,12 +168,12 @@ public class Pion{
     public void setDexterite(int dexterite){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
             if(this.joueur.getPoint() > dexterite){
-                if(dexterite <= this.maxDexterite && dexterite >= this.minDexterite){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.dexterite); //On redonne des points au joueur.
+                if(dexterite <= this.getMaxDexterite() && dexterite >= this.getMinDexterite()){ //Verification si les points sont entre le max et le min.
+                    this.joueur.ajouterPoint(this.dexterite + this.getMinDexterite()); //On redonne des points au joueur.
                     this.dexterite = dexterite; //Le pion a les nouveaux points.
-                    this.joueur.retirerPoint(dexterite); //On retire les points attribués au joueur.
+                    this.joueur.retirerPoint(dexterite - this.getMinDexterite()); //On retire les points attribués au joueur.
                 } else {
-                    System.out.println("Rentrez un chiffre entre : " + this.minDexterite + " et " + this.maxDexterite);
+                    System.out.println("Rentrez un chiffre entre : " + this.getMinDexterite() + " et " + this.getMinDexterite());
                 }
             } else{
                 System.out.println("Vous n'avez pas assez de points à attribuer.");
@@ -224,6 +182,18 @@ public class Pion{
             System.out.println(this.nom + " n'est pas le pion de " + this.joueur.getNom());
         }
     }
+
+    /**
+     * Methodes pour recuperer la dexterite minimum d'un pion.
+     * @return
+     */
+    public abstract int getMinDexterite();
+
+    /**
+     * Methode pour recuperer la dexterite maxmimum d'un pion.
+     * @return
+     */
+    public abstract int getMaxDexterite();
 
     /**
      * Methode pour recuperer la dexterite du pion.
@@ -249,12 +219,12 @@ public class Pion{
     public void setForce(int force){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
             if(this.joueur.getPoint() > force){
-                if(force <= this.maxForce && force >= this.minForce){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.force); //On redonne des points au joueur.
+                if(force <= this.getMaxForce() && force >= this.getMinForce()){ //Verification si les points sont entre le max et le min.
+                    this.joueur.ajouterPoint(this.force + this.getMinForce()); //On redonne des points au joueur.
                     this.force = force; //Le pion a les nouveaux points.
-                    this.joueur.retirerPoint(force); //On retire les points attribués au joueur.
+                    this.joueur.retirerPoint(force - this.getMinForce()); //On retire les points attribués au joueur.
                 } else {
-                    System.out.println("Rentrez un chiffre entre : " + this.minForce + " et " + this.maxForce);
+                    System.out.println("Rentrez un chiffre entre : " + this.getMinForce() + " et " + this.getMaxForce());
                 }
             } else{
                 System.out.println("Vous n'avez pas assez de points à attribuer.");
@@ -264,6 +234,18 @@ public class Pion{
         }
     }
 
+    /**
+     * Methodes pour recuperer la force minimum d'un pion.
+     * @return
+     */
+    public abstract int getMinForce();
+
+    /**
+     * Methode pour recuperer la force maxmimum d'un pion.
+     * @return
+     */
+    public abstract int getMaxForce();
+    
     /**
      * Methode pour recuperer la force du pion.
      * @return this.force
@@ -288,12 +270,12 @@ public class Pion{
     public void setResistance(int resistance){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
             if(this.joueur.getPoint() > resistance){
-                if(resistance <= this.maxResistance && resistance >= this.minResistance){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.resistance); //On redonne des points au joueur.
+                if(resistance <= this.getMaxResistance() && resistance >= this.getMinResistance()){ //Verification si les points sont entre le max et le min.
+                    this.joueur.ajouterPoint(this.resistance + this.getMinResistance()); //On redonne des points au joueur.
                     this.resistance = resistance; //Le pion a les nouveaux points.
-                    this.joueur.retirerPoint(resistance); //On retire les points attribués au joueur.
+                    this.joueur.retirerPoint(resistance - this.getMinResistance()); //On retire les points attribués au joueur.
                 } else {
-                    System.out.println("Rentrez un chiffre entre : " + this.minResistance + " et " + this.maxResistance);
+                    System.out.println("Rentrez un chiffre entre : " + this.getMinResistance() + " et " + this.getMaxResistance());
                 }
             } else{
                 System.out.println("Vous n'avez pas assez de points à atrribuer.");
@@ -303,6 +285,18 @@ public class Pion{
         }
     }
 
+    /**
+     * Methodes pour recuperer la resistance minimum d'un pion.
+     * @return
+     */
+    public abstract int getMinResistance();
+
+    /**
+     * Methode pour recuperer la resistance maxmimum d'un pion.
+     * @return
+     */
+    public abstract int getMaxResistance();
+    
     /**
      * Methode pour recuperer la resistance du pion.
      * @return this.resistance
@@ -328,12 +322,12 @@ public class Pion{
     public void setConstitution(int constitution){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
             if(this.joueur.getPoint() > constitution){
-                if(constitution <= this.maxConstitution && constitution >= this.minConstitution){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.constitution); //On redonne des points au joueur.
+                if(constitution <= this.getMaxConstitution() && constitution >= this.getMinConstitution()){ //Verification si les points sont entre le max et le min.
+                    this.joueur.ajouterPoint(this.constitution + this.getMinConstitution()); //On redonne des points au joueur.
                     this.constitution = constitution; //Le pion a les nouveaux points.
-                    this.joueur.retirerPoint(constitution); //On retire les points attribués au joueur.
+                    this.joueur.retirerPoint(constitution - this.getMinConstitution()); //On retire les points attribués au joueur.
                 } else {
-                    System.out.println("Rentrez un chiffre entre : " + this.minConstitution + " et " + this.maxConstitution);
+                    System.out.println("Rentrez un chiffre entre : " + this.getMinConstitution() + " et " + this.getMaxConstitution());
                 }
             } else{
                 System.out.println("Vous n'avez pas assez de points à attribuer.");
@@ -354,6 +348,18 @@ public class Pion{
         }
     }
 
+    /**
+     * Methodes pour recuperer la consitution minimum d'un pion.
+     * @return
+     */
+    public abstract int getMinConstitution();
+
+    /**
+     * Methode pour recuperer la constitution maxmimum d'un pion.
+     * @return
+     */
+    public abstract int getMaxConstitution();
+    
     /**
      * Methode pour recuperer la constitution du pion.
      * @return this.constitution
@@ -377,12 +383,12 @@ public class Pion{
     public void setInitiative(int initiative){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
             if(this.joueur.getPoint() > initiative){
-                if(initiative <= this.maxInitiative && initiative >= this.minInitiative){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.initiative); //On redonne des points au joueur.
+                if(initiative <= this.getMaxInitiative() && initiative >= this.getMinInitiative()){ //Verification si les points sont entre le max et le min.
+                    this.joueur.ajouterPoint(this.initiative + this.getMinInitiative()); //On redonne des points au joueur.
                     this.initiative = initiative; //Le pion a les nouveaux points.
-                    this.joueur.retirerPoint(initiative); //On retire les points attribués au joueur.
+                    this.joueur.retirerPoint(initiative - this.getMinInitiative()); //On retire les points attribués au joueur.
                 } else {
-                    System.out.println("Rentrez un chiffre entre : " + this.minInitiative + " et " + this.maxInitiative);
+                    System.out.println("Rentrez un chiffre entre : " + this.getMinInitiative() + " et " + this.getMaxInitiative());
                 }
             } else{
                 System.out.println("Vous n'avez pas assez de points à attribuer");
@@ -392,6 +398,18 @@ public class Pion{
         }
     }
 
+    /**
+     * Methodes pour recuperer l'initiative minimum d'un pion.
+     * @return
+     */
+    public abstract int getMinInitiative();
+
+    /**
+     * Methode pour recuperer l'initiative maxmimum d'un pion.
+     * @return
+     */
+    public abstract int getMaxInitiative();
+    
     /**
      * Methode pour recuperer l'initiative du pion.
      * @return this.initiative
@@ -415,18 +433,8 @@ public class Pion{
      */
     public void setStatus(StatusPion status){
         if(status.equals(StatusPion.Combattant)){
-            int var = 0;
-            Iterator<Pion> it = this.joueur.getListPion().iterator();
-            while(it.hasNext()){
-                Pion pion = it.next();
-                if(pion.status == StatusPion.Combattant){
-                    var++;
-                }
-            }
-            if(var >= 15){
-                System.out.println("Vous avez trop de combattant.");
-            } else{
-                this.status = StatusPion.Combattant;
+            if(this.joueur.getNbCombattant() < 15){
+                this.setStatus(status);
             }
         } else if(status.equals(StatusPion.Reserviste)){
             this.status = StatusPion.Reserviste;
