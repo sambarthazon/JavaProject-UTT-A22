@@ -15,6 +15,11 @@ public class Zone extends Thread{
     private NomZone nom;
 
     /**
+     * Attribut indiquant l'appelation de la zone.
+     */
+    private String label;
+
+    /**
      * Attribut indiquant le status de la zone.
      */
     private StatusZone status;
@@ -54,9 +59,10 @@ public class Zone extends Thread{
     /**
      * Constructeur de la classe Zone.
      */
-    public Zone(Partie partie, NomZone nomZone){
+    public Zone(Partie partie, NomZone nomZone, String label){
         this.partie = partie;
         this.nom = nomZone;
+        this.label = label;
 
         this.partie.addZone(this);
     }
@@ -91,6 +97,14 @@ public class Zone extends Thread{
      */
     public NomZone getNomZone(){
         return this.nom;
+    }
+
+    /**
+     * Methode pour recuperer le label de la zone.
+     * @return this.label
+     */
+    public String getLabel(){
+        return this.label;
     }
 
 
@@ -327,6 +341,19 @@ public class Zone extends Thread{
             }
         }
         this.partie.verifierFinPartie();
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                        Affichage                     //
+    //                                                      //
+    //******************************************************//
+
+    @Override
+    public String toString(){
+        return this.label;
     }
 
 }

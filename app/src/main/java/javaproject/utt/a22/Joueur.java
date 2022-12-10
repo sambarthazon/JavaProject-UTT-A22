@@ -237,7 +237,10 @@ public class Joueur{
         return this.arrayPion;
     }
 
-
+    /**
+     * Methode pour recuperer le nombre de combattant que le joueur a.
+     * @return nbCombattant
+     */
     public int getNbCombattant(){
         int nbCombattant = 0;
         Pion pion = null;

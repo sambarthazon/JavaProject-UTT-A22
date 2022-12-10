@@ -434,10 +434,10 @@ public abstract class Pion{
     public void setStatus(StatusPion status){
         if(status.equals(StatusPion.Combattant)){
             if(this.joueur.getNbCombattant() < 15){
-                this.setStatus(status);
+                this.status = status;
             }
         } else if(status.equals(StatusPion.Reserviste)){
-            this.status = StatusPion.Reserviste;
+            this.status = status;
         } else{
             System.out.println("Votre pion ne peut que être un Combattant ou un Reserviste.");
         }
@@ -466,16 +466,19 @@ public abstract class Pion{
      * @param zone
      */
     public void setZone(Zone zone){
-        if(this.zone.equals(zone)){
-            System.out.println("Ce pion appartient déjà à cette zone.");
-        } else{
-            this.zone.removePion(this);
-            this.zone = null;
-        }
-
         if(this.zone == null){
             this.zone = zone;
             this.zone.addPion(this);
+        } else{
+            if(!this.zone.equals(zone)){
+                this.zone.removePion(this);
+                this.zone = null;
+            }
+    
+            if(this.zone == null && zone != null){
+                this.zone = zone;
+                this.zone.addPion(this);
+            }
         }
     }
 
@@ -491,12 +494,12 @@ public abstract class Pion{
 
     //******************************************************//
     //                                                      //
-    //                        Strategie                     //
+    //                        Stratégie                     //
     //                                                      //
     //******************************************************//
 
     /**
-     * Methode pour changer la strategie du pion.
+     * Méthode pour changer la stratégie du pion.
      * @param strategie
      */
     public void setStrategie(Strategie strategie){
@@ -504,7 +507,7 @@ public abstract class Pion{
     }
 
     /**
-     * Methode pour recuperer la strategie du pion.
+     * Méthode pour récuperer la stratégie du pion.
      * @return this.strategie.getNom();
      */
     public String getStrategie(){
@@ -512,7 +515,7 @@ public abstract class Pion{
     }
 
     /**
-     * Methode pour combattre en fonction de la strategie attribuee.
+     * Méthode pour combattre en fonction de la stratégie attribuée.
      */
     public void executerStrategie(){
         this.strategie.combattre(this);
@@ -527,13 +530,13 @@ public abstract class Pion{
     //******************************************************//
 
     /**
-     * Redefinition de la methode toString.
+     * Redéfinition de la méthode toString.
      * @return
      */
     @Override
     public String toString(){
-        return this.nom + " {\n\tECTS = " + this.ECTS + ", Stratégie = " + this.strategie + 
-                            ", Zone = " + this.zone + ", Status = " + this.status +
+        return this.nom + " {\n\tECTS = " + this.ECTS + ", Status = " + this.status + 
+                            ", Stratégie = " + this.strategie + ", Zone = " + this.zone +
                             "\n\tDextérité = " + this.dexterite +
                             ", Force = " + this.force +
                             ", Résistance = " + this.resistance +

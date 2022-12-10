@@ -55,17 +55,34 @@ public class Partie {
         Pion maitreJoueur2 = new Maitre(joueur2, "M");
 
         //Creation des zones
-        Zone zoneBU = new Zone(partie, NomZone.BU);
-        Zone zoneBDE = new Zone(partie, NomZone.BDE);
-        Zone zoneQA = new Zone(partie, NomZone.QuartierAdmin);
-        Zone zoneHI = new Zone(partie, NomZone.HalleIndus);
-        Zone zoneHS = new Zone(partie, NomZone.HalleSport);
+        Zone zoneBU = new Zone(partie, NomZone.BU, "BU");
+        Zone zoneBDE = new Zone(partie, NomZone.BDE, "BDE");
+        Zone zoneQA = new Zone(partie, NomZone.QuartierAdmin, "QA");
+        Zone zoneHI = new Zone(partie, NomZone.HalleIndus, "HI");
+        Zone zoneHS = new Zone(partie, NomZone.HalleSport, "HS");
 
+
+        /**
+         * Parametrage des pions par le joueur.
+         */
         Iterator<Joueur> itJoueur = partie.arrayJoueur.iterator();
         while(itJoueur.hasNext()){
             Joueur joueurActif = itJoueur.next();
-            partie.phaseParametrage(joueurActif, new Scanner(System.in));
+            System.out.println("Le joueur : " + joueurActif.getNom() + " peut parametrer ses pions.");
+            partie.selectionEquipe(joueurActif, new Scanner(System.in));
         }
+
+
+        /**
+         * Lancement de la partie.
+         */
+        Iterator<Zone> itZone = partie.arrayZone.iterator();
+        while(itZone.hasNext()){
+            Zone zone = itZone.next();
+            zone.start();
+        }
+
+        
     }
 
 
@@ -265,6 +282,18 @@ public class Partie {
          * Possibilitees : changement de zone, attribution de stats, changement de strategie,
          * changement de status du pion, changement du status du joueur.
          */
+        this.selectionPion(null, null);
+    }
+
+
+    /**
+     * Methode pour que le joueur choisisse une equipe.
+     * Les equipes sont disponibles dans l'enumeration NomEquipe.
+     * @param joueur
+     */
+    public void selectionEquipe(Joueur joueur, Scanner sc){
+        
+        this.phaseParametrage(joueur, new Scanner(System.in));
     }
 
 
@@ -355,7 +384,12 @@ public class Partie {
                     this.parametrageStrategie(pion, new Scanner(System.in));
                     break;
                 case 8:
-                    this.parametrageZone(pion);
+                    if(!pion.getStatus().equals(StatusPion.Combattant)){
+                        System.out.println("Votre pion doit avoir le status \'Combattant\' pour avoir une zone.");
+                        PreSet.tempo(2500);
+                    } else{
+                        this.parametrageZone(pion, new Scanner(System.in));
+                    }     
                     break;
                 case 0:
                     choix = 0;
@@ -497,10 +531,14 @@ public class Partie {
                 pion.setStatus(StatusPion.Combattant);
                 if(pion.getStatus().equals(StatusPion.Indefini)){
                     System.out.println("Vous avez trop de combattants.");
+                    PreSet.tempo(2500);
                 }
                 break;
             case 2:
                 pion.setStatus(StatusPion.Reserviste);
+                if(pion.getZone() != null){
+                    pion.setZone(null);
+                }
                 break;
             default:
                 break;
@@ -553,56 +591,93 @@ public class Partie {
     }
 
     /**
-     * A REVOIR
+     * 
      * @param pion
      */
-    public void parametrageZone(Pion pion){
-        /**
-         * Demande a l'utilisateur la zone d'affectation du pion.
-         */
+    public void parametrageZone(Pion pion, Scanner sc){
+        while(true){
+            String label;
+            while(true){
+                System.out.print("Quelle zone voulez-vous attribuer ? BU(BU), BDE(BDE), Quartier Admin(QA), Halle Indus(HI), Halle Sportive(HS), Quitter(0) : ");
+                label = sc.nextLine();
+
+                if(label.equals("BU") || label.equals("BDE") || label.equals("QA") ||
+                label.equals("HI") || label.equals("HS") || label.equals("0")){
+                    break;
+                }
+            }
+
+            if(label.equals("0")){
+                break;
+            }
+
+            Zone zone = this.arrayZone.get(this.findZone(label));
+            System.out.println(zone);
+            if(!zone.equals(null)){
+                pion.setZone(zone);
+                break;
+            } else{
+                System.out.println("Cette zone n'existe pas.");
+            }
+        } 
+    }
+
+
+    public int findZone(String str){
+        int index = 0;
+        Zone zone = null;
+
+        Iterator<Zone> it = this.arrayZone.iterator();
+        while(it.hasNext()){
+            zone = it.next();
+            if(zone.getLabel().equals(str)){
+                index = this.arrayZone.indexOf(zone);
+                break;
+            }
+        }
+        return index;
     }
 
     /**
-     * 
+     * Methode pour modifier le status du joueur.
+     * Verification que le joueur ai bien au moins un pion sur chaque zone.
      * @param joueur
      * @return
      */
     public void parametrageStatusJoueur(Joueur joueur){
+        boolean zoneBU_OK = false, zoneBDE_OK = false, zoneQA_OK = false, zoneHI_OK = false, zoneHS_OK = false;
+        int nbPionWithZone = 0;
         Pion pion = null;
-        ArrayList<Pion> pionsCombattant = new ArrayList<>();
-        ArrayList<Pion> pionsStrategie = new ArrayList<>();
-        ArrayList<Pion> pionsZone = new ArrayList<>();
 
-        Iterator<Pion> itForStatus = joueur.getListPion().iterator();
-        while(itForStatus.hasNext()){
-            pion = itForStatus.next();
-            if(pion.getStatus().equals(StatusPion.Combattant)){
-                if(!pionsCombattant.contains(pion)){
-                    pionsCombattant.add(pion);
+        Iterator<Pion> it = joueur.getListPion().iterator();
+        while(it.hasNext()){
+            pion = it.next();
+            if(pion.getZone() != null){
+                if(pion.getZone().getLabel().equals("BU")){
+                    zoneBU_OK = true;
+                    nbPionWithZone ++;
+                } else if(pion.getZone().getLabel().equals("BDE")){
+                    zoneBDE_OK = true;
+                    nbPionWithZone ++;
+                } else if(pion.getZone().getLabel().equals("QA")){
+                    zoneQA_OK = true;
+                    nbPionWithZone ++;
+                } else if(pion.getZone().getLabel().equals("HI")){
+                    zoneHI_OK = true;
+                    nbPionWithZone ++;
+                } else if(pion.getZone().getLabel().equals("HS")){
+                    zoneHS_OK = true;
+                    nbPionWithZone ++;
+                } else{
+
                 }
             }
-        }
 
-        Iterator<Pion> itForStrategieZone = joueur.getListPion().iterator();
-        while(itForStrategieZone.hasNext()){
-            pion = itForStrategieZone.next();
-
-            if(!pion.getStrategie().equals(null)){
-                if(!pionsStrategie.contains(pion)){
-                    pionsStrategie.add(pion);
-                }
+            //Soit une des deux conditions au cas ou le joueur a moins de 5 pions.
+            if((zoneBU_OK && zoneBDE_OK && zoneQA_OK && zoneHI_OK && zoneHS_OK) || (nbPionWithZone == joueur.getListPion().size())){
+                joueur.setStatus(StatusJoueur.Ready);
+                break;
             }
-            if(!pion.getZone().equals(null)){
-                if(!pionsZone.contains(pion)){
-                    pionsZone.add(pion);
-                }
-            }
-        }
-
-        if(pionsCombattant.size() == pionsStrategie.size() && pionsCombattant.size() == pionsZone.size()){
-            joueur.setStatus(StatusJoueur.Ready);
-        } else{
-            System.out.println("Il vous manque des parametrages a faire.");
         }
     }
 }

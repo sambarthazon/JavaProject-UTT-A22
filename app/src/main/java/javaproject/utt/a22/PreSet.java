@@ -16,4 +16,16 @@ public class PreSet{
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
+    /**
+     * Methode pour temporisation.
+     * @param time
+     */
+    public static void tempo(int time){
+        try{
+            Thread.sleep(time);
+        } catch(Exception e){
+
+        }
+    }
 }
