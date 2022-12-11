@@ -68,7 +68,8 @@ public class Partie {
         Iterator<Joueur> itJoueur = partie.arrayJoueur.iterator();
         while(itJoueur.hasNext()){
             Joueur joueurActif = itJoueur.next();
-            System.out.println("Le joueur : " + joueurActif.getNom() + " peut parametrer ses pions.");
+            PreSet.clearConsole();
+            System.out.println("Le joueur : " + joueurActif.getNom() + " va pouvoir commencer le paramétrage.");
             partie.selectionEquipe(joueurActif, new Scanner(System.in));
         }
 
@@ -76,12 +77,14 @@ public class Partie {
         /**
          * Lancement de la partie.
          */
-        Iterator<Zone> itZone = partie.arrayZone.iterator();
-        while(itZone.hasNext()){
-            Zone zone = itZone.next();
-            zone.start();
+        while(partie.getStatus().equals(StatusPartie.Terminee)){
+            partie.lancement(partie);
+            
+            partie.verifierFinPartie();
+            if(partie.getStatus().equals(StatusPartie.Treve)){
+                partie.phaseTreve();
+            }
         }
-
         
     }
 
@@ -237,7 +240,6 @@ public class Partie {
             System.out.println("L'équipe " + this.arrayJoueur.get(1).getEquipe() + " a gagné.");
         } else{
             this.status = StatusPartie.Treve;
-            this.phaseTreve();
         }
     }
 
@@ -292,7 +294,44 @@ public class Partie {
      * @param joueur
      */
     public void selectionEquipe(Joueur joueur, Scanner sc){
-        
+        String equipe = " ";
+
+        while(true) {
+            System.out.print("Equipes disponibles : A2I(A2I), GI(GI), GM(GM), ISI(ISI), MM(MM), MTE(MTE), RT(RT) : ");
+            equipe = sc.nextLine();
+            if (equipe.equals("A2I") || equipe.equals("GI") || equipe.equals("GM") || equipe.equals("ISI") ||
+                equipe.equals("MM") || equipe.equals("MTE") || equipe.equals("RT")){
+                break;
+            }
+        }
+
+        switch (equipe) {
+            case "A2I":
+                joueur.setEquipe(NomEquipe.A2I);
+                break;
+            case "GI":
+                joueur.setEquipe(NomEquipe.GI);
+                break;
+            case "GM":
+                joueur.setEquipe(NomEquipe.GM);
+                break;
+            case "ISI":
+                joueur.setEquipe(NomEquipe.ISI);
+                break;
+            case "MM":
+                joueur.setEquipe(NomEquipe.MM);
+                break;
+            case "MTE":
+                joueur.setEquipe(NomEquipe.MTE);
+                break;
+            case "RT":
+                joueur.setEquipe(NomEquipe.RT);
+                break;
+            default:
+                System.out.println("Choix d'equipe incorrect");
+                break;
+        }
+            
         this.phaseParametrage(joueur, new Scanner(System.in));
     }
 
@@ -678,6 +717,32 @@ public class Partie {
                 joueur.setStatus(StatusJoueur.Ready);
                 break;
             }
+        }
+    }
+
+
+
+    //******************************************************//
+    //                                                      //
+    //                      Deroulement                     //
+    //                                                      //
+    //******************************************************//
+
+    /**
+     * Methode pour lancer le combat sur les zones.
+     * @param partie
+     */
+    public void lancement(Partie partie){
+        Zone zone = null;
+
+        Iterator<Zone> it = partie.arrayZone.iterator();
+        while(it.hasNext()){
+            zone = it.next();
+            zone.combattre();
+        }
+
+        while(!partie.getStatus().equals(StatusPartie.Treve)){
+            //Attente d'une trève
         }
     }
 }

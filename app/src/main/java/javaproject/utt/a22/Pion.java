@@ -167,9 +167,9 @@ public abstract class Pion{
      */
     public void setDexterite(int dexterite){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
-            if(this.joueur.getPoint() > dexterite){
+            if(this.joueur.getPoint() + this.dexterite >= dexterite){
                 if(dexterite <= this.getMaxDexterite() && dexterite >= this.getMinDexterite()){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.dexterite + this.getMinDexterite()); //On redonne des points au joueur.
+                    this.joueur.ajouterPoint(this.dexterite - this.getMinDexterite()); //On redonne des points au joueur.
                     this.dexterite = dexterite; //Le pion a les nouveaux points.
                     this.joueur.retirerPoint(dexterite - this.getMinDexterite()); //On retire les points attribués au joueur.
                 } else {
@@ -218,9 +218,9 @@ public abstract class Pion{
      */
     public void setForce(int force){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
-            if(this.joueur.getPoint() > force){
+            if(this.joueur.getPoint() + this.force >= force){
                 if(force <= this.getMaxForce() && force >= this.getMinForce()){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.force + this.getMinForce()); //On redonne des points au joueur.
+                    this.joueur.ajouterPoint(this.force - this.getMinForce()); //On redonne des points au joueur.
                     this.force = force; //Le pion a les nouveaux points.
                     this.joueur.retirerPoint(force - this.getMinForce()); //On retire les points attribués au joueur.
                 } else {
@@ -269,9 +269,9 @@ public abstract class Pion{
      */
     public void setResistance(int resistance){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
-            if(this.joueur.getPoint() > resistance){
+            if(this.joueur.getPoint() + this.resistance >= resistance){
                 if(resistance <= this.getMaxResistance() && resistance >= this.getMinResistance()){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.resistance + this.getMinResistance()); //On redonne des points au joueur.
+                    this.joueur.ajouterPoint(this.resistance - this.getMinResistance()); //On redonne des points au joueur.
                     this.resistance = resistance; //Le pion a les nouveaux points.
                     this.joueur.retirerPoint(resistance - this.getMinResistance()); //On retire les points attribués au joueur.
                 } else {
@@ -321,9 +321,9 @@ public abstract class Pion{
      */
     public void setConstitution(int constitution){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
-            if(this.joueur.getPoint() > constitution){
+            if(this.joueur.getPoint() + this.constitution >= constitution){
                 if(constitution <= this.getMaxConstitution() && constitution >= this.getMinConstitution()){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.constitution + this.getMinConstitution()); //On redonne des points au joueur.
+                    this.joueur.ajouterPoint(this.constitution - this.getMinConstitution()); //On redonne des points au joueur.
                     this.constitution = constitution; //Le pion a les nouveaux points.
                     this.joueur.retirerPoint(constitution - this.getMinConstitution()); //On retire les points attribués au joueur.
                 } else {
@@ -382,9 +382,9 @@ public abstract class Pion{
      */
     public void setInitiative(int initiative){
         if(this.joueur.getListPion().contains(this)){ //Verification que ce soit le pion du joueur.
-            if(this.joueur.getPoint() > initiative){
+            if(this.joueur.getPoint() + this.initiative >= initiative){
                 if(initiative <= this.getMaxInitiative() && initiative >= this.getMinInitiative()){ //Verification si les points sont entre le max et le min.
-                    this.joueur.ajouterPoint(this.initiative + this.getMinInitiative()); //On redonne des points au joueur.
+                    this.joueur.ajouterPoint(this.initiative - this.getMinInitiative()); //On redonne des points au joueur.
                     this.initiative = initiative; //Le pion a les nouveaux points.
                     this.joueur.retirerPoint(initiative - this.getMinInitiative()); //On retire les points attribués au joueur.
                 } else {
