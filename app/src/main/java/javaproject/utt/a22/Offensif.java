@@ -44,11 +44,14 @@ public class Offensif implements Strategie{
 
         //Si l'attaque est reussi.
         if(reussi){
+            System.out.println("Attaque réussi");
+            PreSet.tempo(2500);
+
             //Recuperation du pion qui a le moins de point de vie de l'adversaire.
             Pion pionCible = getPionCible(pionActeur);
 
-            double y = 0;
-            y = Math.floor(Math.random()*(1-0+1)+0);
+            double y = 1;
+            //y = Math.floor(Math.random()*(1-0+1)+0);
 
             varFuncMin = min(pionActeur.getForce(), pionCible.getResistance());
             varFuncMax = max(varFuncMin);
@@ -57,13 +60,21 @@ public class Offensif implements Strategie{
             //Calcul des degats qui vont etre appliques.
             damage = (int) (y * (1 + coefDegat) * degatReference);
             
+            System.out.println("Vie du pion cible avant : " + pionCible.getECTS() + ", degat de l'attaque : " + damage);
+            PreSet.tempo(2500);
             //Application des degats sur le pion cible.
-            pionCible.setECTS(-damage);
+            pionCible.pionAttaque(damage);
+            System.out.println("Vie du pion cible après : " + pionCible.getECTS());
+            PreSet.tempo(2500);
 
             //Si le pionCible n'a plus de vie.
             if(pionCible.getECTS() <= 0){
-                pionCible.joueur.getPartie().pionMort(pionCible);
+                //pionActeur.getZone().pionMort();
+                //pionCible.joueur.getPartie().pionMort(pionCible);
             }
+        } else{
+            System.out.println("Attaque raté");
+            PreSet.tempo(2500);
         }
     }
 

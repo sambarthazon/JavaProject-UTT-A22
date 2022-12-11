@@ -18,7 +18,7 @@ public abstract class Pion{
     /**
      * L'attribut ECTS equivaut à la vie du pion, une fois à 0 notre pion meurt.
      */
-    protected int ECTS = this.ECTSDefault;
+    protected int ECTS = this.ECTSDefault + this.getMinConstitution();
     /**
      * ECTS de base du pion.
      */
@@ -143,6 +143,16 @@ public abstract class Pion{
             this.ECTS = this.ECTSMax;
         }
     }
+
+
+    public void pionAttaque(int ECTS){
+        this.ECTS -= ECTS;
+    }
+
+    public void pionSoigne(int ECTS){
+        this.ECTS += ECTS;
+    }
+
 
     /**
      * Methode pour recuperer les ECTS du pion.

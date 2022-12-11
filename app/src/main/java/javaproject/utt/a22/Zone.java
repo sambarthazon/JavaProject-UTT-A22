@@ -22,7 +22,7 @@ public class Zone extends Thread{
     /**
      * Attribut indiquant le status de la zone.
      */
-    private StatusZone status;
+    private boolean estControlee = true;
 
     /**
      * Liste de pion de la zone (triee par initiative par ordre decroissant).
@@ -120,16 +120,16 @@ public class Zone extends Thread{
      * Les status sont visibles dans l'enumeration "StatusZone".
      * @param status
      */
-    public void setStatus(StatusZone status){
-        this.status = status;
+    public void setStatus(boolean status){
+        this.estControlee = status;
     }
 
     /**
      * Methode pour recuperer le status de la zone.
      * @return this.status
      */
-    public StatusZone getStatus(){
-        return this.status;
+    public boolean getStatus(){
+        return this.estControlee;
     }
 
 
@@ -202,6 +202,14 @@ public class Zone extends Thread{
                 return p2.initiative - p1.initiative;
             }
         });
+    }
+
+    /**
+     * Methode pour récuperer la liste de pion présent dans la zone.
+     * @return
+     */
+    public LinkedList<Pion> getLinkedPion(){
+        return this.linkedPion;
     }
 
 
@@ -306,41 +314,75 @@ public class Zone extends Thread{
      * Methode pour lancer la methode run pour le multi-threading.
      */
     public void combattre(){
-        this.start();
+        if(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0){
+            this.estControlee = false;
+            this.partie.getListJoueur().get(0).removeZoneControlee(this);
+            this.partie.getListJoueur().get(1).removeZoneControlee(this);
+            this.start();
+        }
+        // try{
+        //     this.start();
+        // } catch (Exception e){
+        //     System.out.println("Thread deja démaré");
+        // }
     }
 
     /**
      * Methode pour lancer le combat de la zone.
      */
     public void run(){
-        this.sortLinkedPion();
-        this.sortLinkedPionTeam1();
-        this.sortLinkedPionTeam2();
+        //Sert a verifier si des pions étaient présent de base sur la zone.
+        final int ECTSBaseTeam1 = this.getECTSTeam1();
+        final int ECTSBaseTeam2 = this.getECTSTeam2();
 
-        while(true){
-            Iterator<Pion> it = this.linkedPion.iterator();
-            while(it.hasNext()){
-                Pion pionActeur = it.next();
-                pionActeur.executerStrategie();
+        Pion pionMort = null;
+        boolean stop = false;
+
+        if(ECTSBaseTeam1 > 0 && ECTSBaseTeam2 > 0){
+
+            while(this.partie.getStatus().equals(StatusPartie.Combat)){
+                this.sortLinkedPion();
                 this.sortLinkedPionTeam1();
                 this.sortLinkedPionTeam2();
+                Iterator<Pion> it = this.linkedPion.iterator();
+                while(it.hasNext()){
+                    Pion pionActeur = it.next();
 
-                if(this.getECTSTeam1() <= 0){
-                    System.out.println("La team 2 possede la zone.");
-                    this.status = StatusZone.Controlee;
-                    break;
-                } else if(this.getECTSTeam2() <= 0){
-                    System.out.println("La team 1 possede la zone.");
-                    this.status = StatusZone.Controlee;
-                    break;
+                    pionActeur.executerStrategie();
+                    
+                    for(Pion pion : this.linkedPion){
+                        if(pion.getECTS() <= 0){
+                            pionMort = pion;
+                            stop = true;
+                            break;
+                        }
+                    }
+
+                    if(stop){
+                        break;
+                    }
+                }
+
+                if(stop){
+                    this.removePion(pionMort);
+                    pionMort.getJoueur().removePion(pionMort);
+
+                    if(this.getECTSTeam1() <= 0){
+                        System.out.println("La team 2 possede la zone.");
+                        this.estControlee = true;
+                        this.partie.getListJoueur().get(1).addZoneControlee(this);
+                    } else if(this.getECTSTeam2() <= 0){
+                        System.out.println("La team 1 possede la zone.");
+                        this.estControlee = true;
+                        this.partie.getListJoueur().get(0).addZoneControlee(this);
+                    }
+                }
+
+                if(this.estControlee){
+                    this.partie.setStatus(StatusPartie.Treve);
                 }
             }
-
-            if(this.status.equals(StatusZone.Controlee)){
-                break;
-            }
         }
-        this.partie.verifierFinPartie();
     }
 
 

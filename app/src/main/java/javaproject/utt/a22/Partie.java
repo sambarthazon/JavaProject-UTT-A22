@@ -61,7 +61,6 @@ public class Partie {
         Zone zoneHI = new Zone(partie, NomZone.HalleIndus, "HI");
         Zone zoneHS = new Zone(partie, NomZone.HalleSport, "HS");
 
-
         /**
          * Parametrage des pions par le joueur.
          */
@@ -77,12 +76,12 @@ public class Partie {
         /**
          * Lancement de la partie.
          */
-        while(partie.getStatus().equals(StatusPartie.Terminee)){
-            partie.lancement(partie);
+        while(!partie.getStatus().equals(StatusPartie.Terminee)){
+            partie.lancement();
             
             partie.verifierFinPartie();
             if(partie.getStatus().equals(StatusPartie.Treve)){
-                partie.phaseTreve();
+                partie.phaseTreve(new Scanner(System.in));
             }
         }
         
@@ -119,14 +118,6 @@ public class Partie {
      */
     public void setStatus(StatusPartie status){
         this.status = status;
-        if(this.status.equals(StatusPartie.Combat)){
-            Zone zone = null;
-            Iterator<Zone> it = this.arrayZone.iterator();
-            while(it.hasNext()){
-                zone = it.next();
-                zone.start();
-            }
-        }
     }
 
     /**
@@ -165,6 +156,14 @@ public class Partie {
         if(this.arrayJoueur.contains(joueur)){
             this.arrayJoueur.remove(joueur);
         }
+    }
+
+    /**
+     * Méthode pour récupérer la liste de joueur de la partie.
+     * @return this.arrayJoueur
+     */
+    public ArrayList<Joueur> getListJoueur(){
+        return this.arrayJoueur;
     }
 
 
@@ -276,7 +275,7 @@ public class Partie {
     /**
      * Methode pour le parametrage des pions en phase de "Treve".
      */
-    public void phaseTreve(){
+    public void phaseTreve(Scanner sc){
         /**
          * Affichage a l'utilisateur des pions qu'il lui reste,
          * des zones qu'il a controle, des ECTS de son equipe sur les zones non controlees.
@@ -284,7 +283,15 @@ public class Partie {
          * Possibilitees : changement de zone, attribution de stats, changement de strategie,
          * changement de status du pion, changement du status du joueur.
          */
-        this.selectionPion(null, null);
+        Joueur joueur = null;
+
+        Iterator<Joueur> it = this.arrayJoueur.iterator();
+        while(it.hasNext()){
+            PreSet.clearConsole();
+            joueur = it.next();
+            System.out.println(joueur.getListPion());
+            this.selectionPion(joueur, new Scanner(System.in));
+        }
     }
 
 
@@ -356,8 +363,15 @@ public class Partie {
 
             pion = joueur.getListPion().get(this.findPion(joueur, input));
             if(!pion.equals(null)){
-                System.out.println("Points qu'il vous reste a attribuer : " + joueur.getPoint());
-                this.parametragePion(joueur, pion, new Scanner(System.in));
+                if(pion.getZone() != null && !this.status.equals(StatusPartie.Parametrage)){
+                    if(pion.getZone().getStatus()){
+                        this.parametragePionTreve(joueur, pion, new Scanner(System.in));
+                    } else{
+                        System.out.println("La zone de ce pion n'est pas controlee vous ne pouvez pas faire de modification.");
+                    }
+                } else{
+                    this.parametragePion(joueur, pion, new Scanner(System.in));
+                }
             } else{
                 System.out.println("Ce pion n'existe pas.");
             }
@@ -389,6 +403,7 @@ public class Partie {
      * Methode pour le parametrage du pion.
      * @param joueur
      * @param pion
+     * @param sc
      */
     public void parametragePion(Joueur joueur, Pion pion, Scanner sc){
         while(true){
@@ -399,7 +414,7 @@ public class Partie {
             System.out.print("Modification de Dexterite(1), Force(2), Resistance(3), Constitution(4), Initiative(5), " +
                                 "Status(6), Strategie(7), Zone(8),  Quitter(0) : ");
             int choix = sc.nextInt();
-            
+
             switch(choix){
                 case 1:
                     this.parametrageDexterite(pion, new Scanner(System.in));
@@ -431,12 +446,53 @@ public class Partie {
                     }     
                     break;
                 case 0:
-                    choix = 0;
                     break;
                 default:
                     break;
             }
             //Si le joueur a fini le parametrage de ce pion.
+            if(choix == 0){
+                break;
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param joueur
+     * @param pion
+     * @param sc
+     */
+    public void parametragePionTreve(Joueur joueur, Pion pion, Scanner sc){
+        while(true){
+            PreSet.clearConsole();
+            System.out.println(pion);
+            System.out.println("Point restant a distribuer : " + joueur.getPoint());
+
+            System.out.print("Modification de Status(1), Strategie(2), Zone(3),  Quitter(0) : ");
+            int choix = sc.nextInt();
+
+            switch(choix){
+                case 1:
+                    this.parametrageStatusPion(pion, new Scanner(System.in));
+                    break;
+                case 2:
+                    this.parametrageStrategie(pion, new Scanner(System.in));
+                    break;
+                case 3:
+                    if(!pion.getStatus().equals(StatusPion.Combattant)){
+                        System.out.println("Votre pion doit avoir le status \'Combattant\' pour avoir une zone.");
+                        PreSet.tempo(2500);
+                    } else{
+                        this.parametrageZone(pion, new Scanner(System.in));
+                    }    
+                    break;
+                case 0:
+                    break;
+                default:
+                    break;
+            }
+
             if(choix == 0){
                 break;
             }
@@ -636,6 +692,21 @@ public class Partie {
     public void parametrageZone(Pion pion, Scanner sc){
         while(true){
             String label;
+
+            if(pion.getJoueur().getNom().equals(NOM_JOUEUR1)){
+                System.out.println("ECTS de votre equipe sur la BU : " + this.arrayZone.get(this.findZone("BU")).getECTSTeam1() +
+                                "\nECTS de votre equipe sur le BDE : " + this.arrayZone.get(this.findZone("BDE")).getECTSTeam1() +
+                                "\nECTS de votre equipe sur le QA : " + this.arrayZone.get(this.findZone("QA")).getECTSTeam1() +
+                                "\nECTS de votre equipe sur la HI : " + this.arrayZone.get(this.findZone("HI")).getECTSTeam1() +
+                                "\nECTS de votre equipe sur la HS : " + this.arrayZone.get(this.findZone("HS")).getECTSTeam1());
+            } else if(pion.getJoueur().getNom().equals(NOM_JOUEUR2)){
+                System.out.println("ECTS de votre equipe sur la BU : " + this.arrayZone.get(this.findZone("BU")).getECTSTeam2() +
+                                "\nECTS de votre equipe sur le BDE : " + this.arrayZone.get(this.findZone("BDE")).getECTSTeam2() +
+                                "\nECTS de votre equipe sur le QA : " + this.arrayZone.get(this.findZone("QA")).getECTSTeam2() +
+                                "\nECTS de votre equipe sur la HI : " + this.arrayZone.get(this.findZone("HI")).getECTSTeam2() +
+                                "\nECTS de votre equipe sur la HS : " + this.arrayZone.get(this.findZone("HS")).getECTSTeam2());
+            }
+
             while(true){
                 System.out.print("Quelle zone voulez-vous attribuer ? BU(BU), BDE(BDE), Quartier Admin(QA), Halle Indus(HI), Halle Sportive(HS), Quitter(0) : ");
                 label = sc.nextLine();
@@ -730,18 +801,19 @@ public class Partie {
 
     /**
      * Methode pour lancer le combat sur les zones.
-     * @param partie
      */
-    public void lancement(Partie partie){
+    public void lancement(){
         Zone zone = null;
 
-        Iterator<Zone> it = partie.arrayZone.iterator();
+        this.setStatus(StatusPartie.Combat);
+
+        Iterator<Zone> it = this.arrayZone.iterator();
         while(it.hasNext()){
             zone = it.next();
             zone.combattre();
         }
 
-        while(!partie.getStatus().equals(StatusPartie.Treve)){
+        while(!this.getStatus().equals(StatusPartie.Treve)){
             //Attente d'une trève
         }
     }
