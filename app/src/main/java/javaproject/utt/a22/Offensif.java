@@ -44,7 +44,7 @@ public class Offensif implements Strategie{
 
         //Si l'attaque est reussi.
         if(reussi){
-            System.out.println("Attaque réussi");
+            System.out.println("Attaque de : " + pionActeur.getNom() + " du " + pionActeur.getJoueur().getNom() + " réussi.");
             PreSet.tempo(2500);
 
             //Recuperation du pion qui a le moins de point de vie de l'adversaire.
@@ -60,11 +60,11 @@ public class Offensif implements Strategie{
             //Calcul des degats qui vont etre appliques.
             damage = (int) (y * (1 + coefDegat) * degatReference);
             
-            System.out.println("Vie du pion cible avant : " + pionCible.getECTS() + ", degat de l'attaque : " + damage);
+            System.out.println("Vie de " + pionCible.getNom() + " du " + pionCible.getJoueur().getNom() + " : " + pionCible.getECTS() + " avant.");
             PreSet.tempo(2500);
             //Application des degats sur le pion cible.
             pionCible.pionAttaque(damage);
-            System.out.println("Vie du pion cible après : " + pionCible.getECTS());
+            System.out.println("Vie de " + pionCible.getNom() + " du " + pionCible.getJoueur().getNom() + " : " + pionCible.getECTS() + " après.");
             PreSet.tempo(2500);
 
             //Si le pionCible n'a plus de vie.
@@ -73,7 +73,7 @@ public class Offensif implements Strategie{
                 //pionCible.joueur.getPartie().pionMort(pionCible);
             }
         } else{
-            System.out.println("Attaque raté");
+            System.out.println("Attaque de : " + pionActeur.getNom() + " du " + pionActeur.getJoueur().getNom() + " raté.");
             PreSet.tempo(2500);
         }
     }
@@ -122,7 +122,7 @@ public class Offensif implements Strategie{
     public Pion getPionCible(Pion pionActeur){
         Pion pionCible = null;
 
-        if(pionActeur.joueur.getNom().equals("Joueur 1")){
+        if(pionActeur.joueur.getNom().equals(Partie.NOM_JOUEUR1)){
             pionCible = pionActeur.getZone().getLinkedListTeam2().getFirst();
         } else{
             pionCible = pionActeur.getZone().getLinkedListTeam1().getFirst();

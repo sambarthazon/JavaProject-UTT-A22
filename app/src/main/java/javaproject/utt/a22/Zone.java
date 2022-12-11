@@ -2,7 +2,7 @@ package javaproject.utt.a22;
 
 import java.util.*;
 
-public class Zone extends Thread{
+public class Zone{
 
     /**
      * Attribut indiquant la partie de la zone.
@@ -23,6 +23,11 @@ public class Zone extends Thread{
      * Attribut indiquant le status de la zone.
      */
     private boolean estControlee = true;
+
+    /**
+     * Attribut indiquant si nous sommes dans le premier tour de combat.
+     */
+    private boolean isFirst = true;
 
     /**
      * Liste de pion de la zone (triee par initiative par ordre decroissant).
@@ -117,7 +122,7 @@ public class Zone extends Thread{
 
     /**
      * Methode pour changer le status de la zone.
-     * Les status sont visibles dans l'enumeration "StatusZone".
+     * 1 pour controlée et 0 pour non controlée.
      * @param status
      */
     public void setStatus(boolean status){
@@ -315,73 +320,64 @@ public class Zone extends Thread{
      */
     public void combattre(){
         if(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0){
-            this.estControlee = false;
-            this.partie.getListJoueur().get(0).removeZoneControlee(this);
-            this.partie.getListJoueur().get(1).removeZoneControlee(this);
-            this.start();
+            PreSet.setTerminal();
+            System.out.println("Combat zone : " + this.label);
+            System.out.println(this.linkedPion);
+            PreSet.tempo(2500);
+
+            this.firstTour();
+            
+            Pion pionActeur = this.linkedPion.getFirst();
+            pionActeur.executerStrategie();
+
+            linkedPion.removeFirst();
+            linkedPion.addLast(pionActeur);
+
+            this.pionMort();
         }
-        // try{
-        //     this.start();
-        // } catch (Exception e){
-        //     System.out.println("Thread deja démaré");
-        // }
     }
 
     /**
-     * Methode pour lancer le combat de la zone.
+     * Methode pour organiser les listes au premier tour de combat.
      */
-    public void run(){
-        //Sert a verifier si des pions étaient présent de base sur la zone.
-        final int ECTSBaseTeam1 = this.getECTSTeam1();
-        final int ECTSBaseTeam2 = this.getECTSTeam2();
+    public void firstTour(){
+        if(isFirst){
+            this.sortLinkedPion();
+            this.sortLinkedPionTeam1();
+            this.sortLinkedPionTeam2();
+            isFirst = false;
+        }
+    }
 
-        Pion pionMort = null;
-        boolean stop = false;
+    /**
+     * Methode pour gérer les pions morts.
+     */
+    public void pionMort(){
+        Pion pion = null;
 
-        if(ECTSBaseTeam1 > 0 && ECTSBaseTeam2 > 0){
-
-            while(this.partie.getStatus().equals(StatusPartie.Combat)){
-                this.sortLinkedPion();
-                this.sortLinkedPionTeam1();
-                this.sortLinkedPionTeam2();
-                Iterator<Pion> it = this.linkedPion.iterator();
-                while(it.hasNext()){
-                    Pion pionActeur = it.next();
-
-                    pionActeur.executerStrategie();
-                    
-                    for(Pion pion : this.linkedPion){
-                        if(pion.getECTS() <= 0){
-                            pionMort = pion;
-                            stop = true;
-                            break;
-                        }
-                    }
-
-                    if(stop){
-                        break;
-                    }
-                }
-
-                if(stop){
-                    this.removePion(pionMort);
-                    pionMort.getJoueur().removePion(pionMort);
-
-                    if(this.getECTSTeam1() <= 0){
-                        System.out.println("La team 2 possede la zone.");
-                        this.estControlee = true;
-                        this.partie.getListJoueur().get(1).addZoneControlee(this);
-                    } else if(this.getECTSTeam2() <= 0){
-                        System.out.println("La team 1 possede la zone.");
-                        this.estControlee = true;
-                        this.partie.getListJoueur().get(0).addZoneControlee(this);
-                    }
-                }
-
-                if(this.estControlee){
-                    this.partie.setStatus(StatusPartie.Treve);
-                }
+        Iterator<Pion> it = this.linkedPion.iterator();
+        while(it.hasNext()){
+            pion = it.next();
+            if(pion.getECTS() <= 0){
+                break;
             }
+        }
+
+        if(pion.getECTS() <= 0){
+            this.removePion(pion);
+            pion.getJoueur().removePion(pion);
+            System.out.println(this.linkedPion);
+            this.enTreve();
+        }
+    }
+
+    /**
+     * Methode pour mettre en trève la zone.
+     */
+    public void enTreve(){
+        if(this.getECTSTeam1() <= 0 || this.getECTSTeam2() <= 0){
+            this.estControlee = true;
+            this.getPartie().setStatus(StatusPartie.Treve);
         }
     }
 

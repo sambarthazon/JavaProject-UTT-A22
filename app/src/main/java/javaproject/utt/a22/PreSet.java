@@ -82,26 +82,6 @@ public class PreSet{
         maitreJoueur1.setStatus(StatusPion.Reserviste);
         Pion maitreJoueur2 = new Maitre(joueur2, "M");
         maitreJoueur2.setStatus(StatusPion.Reserviste);
-        
-
-        // Iterator<Zone> it = partie.getListZone().iterator();
-        // while(it.hasNext()){
-        //     Zone zone = it.next();
-
-        //     System.out.println("------------------ AVANT ----------------");
-        //     System.out.println(zone.getLinkedListTeam1());
-        //     System.out.println(zone.getLinkedListTeam2());
-        //     System.out.println(zone.getLinkedPion());
-
-        //     zone.sortLinkedPionTeam1();
-        //     zone.sortLinkedPionTeam2();
-        //     zone.sortLinkedPion();
-
-        //     System.out.println("------------------ APRES ----------------");
-        //     System.out.println(zone.getLinkedListTeam1());
-        //     System.out.println(zone.getLinkedListTeam2());
-        //     System.out.println(zone.getLinkedPion());
-        // }
 
         /**
          * Lancement de la partie.
@@ -137,5 +117,11 @@ public class PreSet{
         } catch(Exception e){
 
         }
+    }
+
+
+    public static void setTerminal(){
+        clearConsole();
+        System.out.println("======================================== C'est du Brutal ! ========================================");
     }
 }

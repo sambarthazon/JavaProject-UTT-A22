@@ -1,5 +1,6 @@
 package javaproject.utt.a22;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 /**
@@ -484,7 +485,15 @@ public class Partie {
                         System.out.println("Votre pion doit avoir le status \'Combattant\' pour avoir une zone.");
                         PreSet.tempo(2500);
                     } else{
-                        this.parametrageZone(pion, new Scanner(System.in));
+                        if(pion.getZone() != null){
+                            if(pion.getZone().getStatus()){
+                                this.parametrageZone(pion, new Scanner(System.in));
+                            } else{
+                                System.out.println("La zone de votre pion n'est pas controlee.");
+                            }
+                        } else{
+                            this.parametrageZone(pion, new Scanner(System.in));
+                        }
                     }    
                     break;
                 case 0:
@@ -649,8 +658,8 @@ public class Partie {
 
         System.out.println("Strategie actuelle de votre pion : " + pion.getStrategie());
         while(true){
-            System.out.print("Strategie : Offensif(1), Defensif(2), Aleatoire(3), Preferentielle(4)\n" +
-                                "Aide(9), Quitter(0) : ");
+            System.out.print("Strategie : Offensif(1), Defensif(2), Aleatoire(3), Preferentielle(4)" +
+                                ", Doc(9), Quitter(0) : ");
             strategie = sc.nextInt();
 
             if(strategie >= 1 && strategie <= 4 || strategie == 9 || strategie == 0){
@@ -804,17 +813,28 @@ public class Partie {
      */
     public void lancement(){
         Zone zone = null;
+        Joueur joueur = null;
 
-        this.setStatus(StatusPartie.Combat);
+        while(!this.getStatus().equals(StatusPartie.Terminee)){
+            this.setStatus(StatusPartie.Combat);
 
-        Iterator<Zone> it = this.arrayZone.iterator();
-        while(it.hasNext()){
-            zone = it.next();
-            zone.combattre();
-        }
+            while(this.getStatus().equals(StatusPartie.Combat)){
+                Iterator<Zone> itZone = this.arrayZone.iterator();
+                while(itZone.hasNext()){
+                    if(this.getStatus().equals(StatusPartie.Combat)){
+                        zone = itZone.next();
+                        zone.combattre();
+                    } else{
+                        break;
+                    }
+                }
+            }
 
-        while(!this.getStatus().equals(StatusPartie.Treve)){
-            //Attente d'une trève
+            Iterator<Joueur> itJoueur = this.arrayJoueur.iterator();
+            while(itJoueur.hasNext()){
+                joueur = itJoueur.next();
+                this.selectionPion(joueur, new Scanner(System.in));
+            }
         }
     }
 }
