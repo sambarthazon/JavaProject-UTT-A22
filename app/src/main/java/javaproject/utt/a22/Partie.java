@@ -1,6 +1,5 @@
 package javaproject.utt.a22;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 /**
@@ -208,46 +207,6 @@ public class Partie {
 
     //******************************************************//
     //                                                      //
-    //                      Action partie                   //
-    //                                                      //
-    //******************************************************//
-
-    /**
-     * Methode pour enlever un pion de la partie quand il est mort.
-     * Ce pion sera enleve de toutes les collections ou il est present.
-     * @param pion
-     */
-    public void pionMort(Pion pion){
-        pion.getZone().removePion(pion);
-        pion.getJoueur().removePion(pion);
-    }
-
-
-    /**
-     * Methode pour verifier si la partie se termine ou non).
-     * Si oui, annonce du gagnant et fin de la partie.
-     * Sinon, lancement de parametrage de la "Treve".
-     */
-    public void verifierFinPartie(){
-        int nbZoneControleeJoueur1 = this.arrayJoueur.get(0).getZoneControlee().size();
-        int nbZoneControleeJoueur2 = this.arrayJoueur.get(1).getZoneControlee().size();
-
-        if(nbZoneControleeJoueur1 >= 3){
-            this.status = StatusPartie.Terminee;
-            System.out.println("L'équipe " + this.arrayJoueur.get(0).getEquipe() + " a gagné.");
-        } else if(nbZoneControleeJoueur2 >= 3){
-            this.status = StatusPartie.Terminee;
-            System.out.println("L'équipe " + this.arrayJoueur.get(1).getEquipe() + " a gagné.");
-        } else{
-            this.status = StatusPartie.Treve;
-        }
-    }
-
-
-
-
-    //******************************************************//
-    //                                                      //
     //                      Parametrage                     //
     //                                                      //
     //******************************************************//
@@ -351,7 +310,7 @@ public class Partie {
         Pion pion = null;
 
         while(true){
-            PreSet.clearConsole();
+            PreSet.setTerminal();
             System.out.println(joueur.getListPion());
 
             System.out.print("Quel pion voulez-vous modifier ? (Entrez son nom ou \'0\' pour quitter) : ");
@@ -359,22 +318,29 @@ public class Partie {
 
             //Si le joueur decide de quitter.
             if(input.equals("0")){
-                break;
-            }
-
-            pion = joueur.getListPion().get(this.findPion(joueur, input));
-            if(!pion.equals(null)){
-                if(pion.getZone() != null && !this.status.equals(StatusPartie.Parametrage)){
-                    if(pion.getZone().getStatus()){
-                        this.parametragePionTreve(joueur, pion, new Scanner(System.in));
-                    } else{
-                        System.out.println("La zone de ce pion n'est pas controlee vous ne pouvez pas faire de modification.");
-                    }
+                if(this.parametrageStatusJoueur(joueur)){
+                    break;
                 } else{
-                    this.parametragePion(joueur, pion, new Scanner(System.in));
+                    System.out.println("Vous n'avez pas configurer correctement vos pions.");
+                    PreSet.tempo(2500);
                 }
             } else{
-                System.out.println("Ce pion n'existe pas.");
+                pion = joueur.getListPion().get(this.findPion(joueur, input));
+                if(!pion.equals(null)){
+                    if(pion.getZone() != null){
+                        if(pion.getZone().getStatus()){
+                            this.parametragePionTreve(joueur, pion, new Scanner(System.in));
+                        } else{
+                            System.out.println("La zone de ce pion n'est pas en trêve.");
+                            PreSet.tempo(1500);
+                        }
+                    } else{
+                        this.parametragePion(joueur, pion, new Scanner(System.in));
+                    }
+                } else{
+                    System.out.println("Ce pion n'existe pas.");
+                    PreSet.tempo(1500);
+                }
             }
         }
     }
@@ -408,7 +374,7 @@ public class Partie {
      */
     public void parametragePion(Joueur joueur, Pion pion, Scanner sc){
         while(true){
-            PreSet.clearConsole();
+            PreSet.setTerminal();
             System.out.println(pion);
             System.out.println("Point restant a distribuer : " + joueur.getPoint());
 
@@ -466,7 +432,7 @@ public class Partie {
      */
     public void parametragePionTreve(Joueur joueur, Pion pion, Scanner sc){
         while(true){
-            PreSet.clearConsole();
+            PreSet.setTerminal();
             System.out.println(pion);
             System.out.println("Point restant a distribuer : " + joueur.getPoint());
 
@@ -633,10 +599,6 @@ public class Partie {
         switch(status){
             case 1:
                 pion.setStatus(StatusPion.Combattant);
-                if(pion.getStatus().equals(StatusPion.Indefini)){
-                    System.out.println("Vous avez trop de combattants.");
-                    PreSet.tempo(2500);
-                }
                 break;
             case 2:
                 pion.setStatus(StatusPion.Reserviste);
@@ -763,7 +725,8 @@ public class Partie {
      * @param joueur
      * @return
      */
-    public void parametrageStatusJoueur(Joueur joueur){
+    public boolean parametrageStatusJoueur(Joueur joueur){
+        boolean isOk = false;
         boolean zoneBU_OK = false, zoneBDE_OK = false, zoneQA_OK = false, zoneHI_OK = false, zoneHS_OK = false;
         int nbPionWithZone = 0;
         Pion pion = null;
@@ -794,10 +757,13 @@ public class Partie {
 
             //Soit une des deux conditions au cas ou le joueur a moins de 5 pions.
             if((zoneBU_OK && zoneBDE_OK && zoneQA_OK && zoneHI_OK && zoneHS_OK) || (nbPionWithZone == joueur.getListPion().size())){
+                System.out.println(nbPionWithZone + ", " + joueur.getListPion().size());
                 joueur.setStatus(StatusJoueur.Ready);
+                isOk = true;
                 break;
             }
         }
+        return isOk;
     }
 
 
@@ -830,11 +796,61 @@ public class Partie {
                 }
             }
 
+            int nbZoneControleeJoueur1 = this.arrayJoueur.get(0).getZoneControlee().size();
+            int nbZoneControleeJoueur2 = this.arrayJoueur.get(1).getZoneControlee().size();
+
+            if(nbZoneControleeJoueur1 >= 3){
+                this.status = StatusPartie.Terminee;
+                System.out.println("L'équipe " + this.arrayJoueur.get(0).getEquipe() + " a gagné.");
+                break;
+            } else if(nbZoneControleeJoueur2 >= 3){
+                this.status = StatusPartie.Terminee;
+                System.out.println("L'équipe " + this.arrayJoueur.get(1).getEquipe() + " a gagné.");
+                break;
+            } else{
+                this.status = StatusPartie.Treve;
+            }
+            System.out.println("Le " + this.arrayJoueur.get(0).getNom() + " possede " + this.arrayJoueur.get(0).getZoneControlee());
+            System.out.println("Le " + this.arrayJoueur.get(1).getNom() + " possede " + this.arrayJoueur.get(1).getZoneControlee());
+            PreSet.tempo(5000);
+
+
             Iterator<Joueur> itJoueur = this.arrayJoueur.iterator();
             while(itJoueur.hasNext()){
                 joueur = itJoueur.next();
                 this.selectionPion(joueur, new Scanner(System.in));
             }
+        }
+
+    }
+
+    /**
+     * Methode pour enlever un pion de la partie quand il est mort.
+     * Ce pion sera enleve de toutes les collections ou il est present.
+     * @param pion
+     */
+    public void pionMort(Pion pion){
+        pion.getZone().removePion(pion);
+        pion.getJoueur().removePion(pion);
+    }
+
+    /**
+     * Methode pour verifier si la partie se termine ou non).
+     * Si oui, annonce du gagnant et fin de la partie.
+     * Sinon, lancement de parametrage de la "Treve".
+     */
+    public void verifierFinPartie(){
+        int nbZoneControleeJoueur1 = this.arrayJoueur.get(0).getZoneControlee().size();
+        int nbZoneControleeJoueur2 = this.arrayJoueur.get(1).getZoneControlee().size();
+
+        if(nbZoneControleeJoueur1 >= 3){
+            this.status = StatusPartie.Terminee;
+            System.out.println("L'équipe " + this.arrayJoueur.get(0).getEquipe() + " a gagné.");
+        } else if(nbZoneControleeJoueur2 >= 3){
+            this.status = StatusPartie.Terminee;
+            System.out.println("L'équipe " + this.arrayJoueur.get(1).getEquipe() + " a gagné.");
+        } else{
+            this.status = StatusPartie.Treve;
         }
     }
 }

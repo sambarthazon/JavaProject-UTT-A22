@@ -48,7 +48,7 @@ public class Joueur{
     /**
      * Liste des zones controlee par le joueur.
      */
-    private Set<Zone> setZoneControlee = new HashSet<Zone>();
+    private ArrayList<Zone> setZoneControlee = new ArrayList<Zone>();
 
 
     /**
@@ -269,6 +269,8 @@ public class Joueur{
      * @param zone
      */
     public void addZoneControlee(Zone zone){
+        System.out.println("Ajout de " + zone + " au " + this.nom);
+        PreSet.tempo(5000);
         this.setZoneControlee.add(zone);
     }
 
@@ -287,7 +289,7 @@ public class Joueur{
      * Methode pour recuperer les zones que le joueur possede.
      * @return this.setZoneControlee
      */
-    public Set<Zone> getZoneControlee(){
+    public ArrayList<Zone> getZoneControlee(){
         return this.setZoneControlee;
     }
 }

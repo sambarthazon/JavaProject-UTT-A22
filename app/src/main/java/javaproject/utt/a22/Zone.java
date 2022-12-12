@@ -320,10 +320,11 @@ public class Zone{
      */
     public void combattre(){
         if(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0){
+            this.init();
             PreSet.setTerminal();
             System.out.println("Combat zone : " + this.label);
             System.out.println(this.linkedPion);
-            PreSet.tempo(2500);
+            //PreSet.tempo(2500);
 
             this.firstTour();
             
@@ -335,6 +336,13 @@ public class Zone{
 
             this.pionMort();
         }
+    }
+
+
+    public void init(){
+        this.estControlee = false;
+        this.partie.getListJoueur().get(0).removeZoneControlee(this);
+        this.partie.getListJoueur().get(1).removeZoneControlee(this);
     }
 
     /**
@@ -375,9 +383,18 @@ public class Zone{
      * Methode pour mettre en trève la zone.
      */
     public void enTreve(){
-        if(this.getECTSTeam1() <= 0 || this.getECTSTeam2() <= 0){
+        System.out.println("Est ce qu'il vas y avoir une treve ?");
+        PreSet.tempo(1000);
+        if(this.getECTSTeam1() == 0){
+            System.out.println("La zone est controlee par l'equipe 2 car les ects de l'equipe 1 sont : " + this.getECTSTeam1());
             this.estControlee = true;
-            this.getPartie().setStatus(StatusPartie.Treve);
+            this.partie.getListJoueur().get(1).addZoneControlee(this);
+            this.partie.setStatus(StatusPartie.Treve);
+        } else if(this.getECTSTeam2() == 0){
+            System.out.println("La zone est controlee par l'equipe 1 car les ects de l'equipe 2 sont : " + this.getECTSTeam2());
+            this.estControlee = true;
+            this.partie.getListJoueur().get(0).addZoneControlee(this);
+            this.partie.setStatus(StatusPartie.Treve);
         }
     }
 

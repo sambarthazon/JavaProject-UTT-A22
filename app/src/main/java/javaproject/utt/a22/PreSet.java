@@ -45,6 +45,9 @@ public class PreSet{
                 } else if(i < 16){
                     etudiantJoueur1.setZone(zoneHS);
                 }
+                if(i % 2 == 0){
+                    etudiantJoueur1.setStrategie(new Defensif());
+                }
             }
 
             Pion etudiantJoueur2 = new Etudiant(joueur2, "E"+i);
@@ -66,6 +69,9 @@ public class PreSet{
                 } else if(i < 16){
                     etudiantJoueur2.setZone(zoneHS);
                 }
+                if(i % 2 == 0){
+                    etudiantJoueur2.setStrategie(new Defensif());
+                }
             }
         }
 
@@ -86,16 +92,7 @@ public class PreSet{
         /**
          * Lancement de la partie.
          */
-        while(!partie.getStatus().equals(StatusPartie.Terminee)){
-            partie.lancement();
-            
-            System.out.println("Un combat est terminé");
-
-            partie.verifierFinPartie();
-            if(partie.getStatus().equals(StatusPartie.Treve)){
-                partie.phaseTreve(new Scanner(System.in));
-            }
-        }
+        partie.lancement();
     }
 
     /**

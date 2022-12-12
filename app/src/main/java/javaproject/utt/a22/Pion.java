@@ -56,7 +56,7 @@ public abstract class Pion{
     /**
      * Status de combat du pion (Combattant, Reserviste ou Indefini).
      */
-    protected StatusPion status = StatusPion.Indefini;
+    protected StatusPion status = StatusPion.Reserviste;
 
     /**
      * Strategie que le pion adaptera pour combattre (Offensif, Defensif, Aleatoire ou Preferentielle).
@@ -445,6 +445,9 @@ public abstract class Pion{
         if(status.equals(StatusPion.Combattant)){
             if(this.joueur.getNbCombattant() < 15){
                 this.status = status;
+            } else{
+                System.out.println("Vous avez trop de combattant.");
+                PreSet.tempo(2500);
             }
         } else if(status.equals(StatusPion.Reserviste)){
             this.status = status;

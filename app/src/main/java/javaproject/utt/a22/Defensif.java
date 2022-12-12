@@ -1,5 +1,7 @@
 package javaproject.utt.a22;
 
+import java.util.Random;
+
 /**
  * Classe Defensif implementant Strategie pour combattre defensivement.
  */
@@ -8,7 +10,7 @@ public class Defensif implements Strategie{
     /**
      * Nom de la strategie
      */
-    private final String nom = "Défensif";
+    private String nom = "Defensif";
 
     /**
      * Main
@@ -17,6 +19,9 @@ public class Defensif implements Strategie{
     public static void main(String[] args) {
         
     }
+
+
+    
 
     /**
      * Implémentation de la méthode combattre.
@@ -29,23 +34,44 @@ public class Defensif implements Strategie{
         final int x_Max = 100;
 
         //
-        int heal = 0;
+        double heal = 0;
 
 
         x = (int) Math.floor(Math.random()*(x_Max-x_Min+1)+x_Min);
         Boolean reussi = x >= 0 && x <= 20 + 6 * pionActeur.dexterite ? true : false;
 
         if(reussi){
+            System.out.println("Soin de : " + pionActeur.getNom() + " du " + pionActeur.getJoueur().getNom() + " réussi.");
+            //PreSet.tempo(1500);
             //Recuperation du joueur qui a le moins de point de vie de son equipe.
             Pion pionCible = getPionCible(pionActeur);
 
+            Random rand = new Random();
             double y = 0;
-            y = Math.floor(Math.random()*(0.6-0+1)+0);
+            while(true){
+                y = rand.nextDouble();
+                if(y > 0 && y <= 0.6){
+                    break;
+                }
+            }
+            
+            System.out.println(y);
+            //PreSet.tempo(1500);
 
-            heal = (int) y * (10 + pionCible.constitution);
 
+            heal = y * (10 + pionCible.constitution);
+            System.out.println("Soin de valeur : " + heal);
+            //PreSet.tempo(1500);
+
+            System.out.println("Vie de " + pionCible.getNom() + " du " + pionCible.getJoueur().getNom() + " : " + pionCible.getECTS() + " avant.");
+            //PreSet.tempo(1500);
             //Application du soin sur le pion cible.
-            pionCible.setECTS(heal);
+            pionCible.setECTS((int)heal);
+            System.out.println("Vie de " + pionCible.getNom() + " du " + pionCible.getJoueur().getNom() + " : " + pionCible.getECTS() + " après.");
+            //PreSet.tempo(1500);
+        } else{
+            System.out.println("Soin de : " + pionActeur.getNom() + " du " + pionActeur.getJoueur().getNom() + " raté.");
+            //PreSet.tempo(1500);
         }
     }
 
