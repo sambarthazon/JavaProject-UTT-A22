@@ -8,7 +8,7 @@ import java.util.Random;
 public class Defensif implements Strategie{
     
     /**
-     * Nom de la strategie
+     * Attribut indiquant le nom de la stratégie.
      */
     private String nom = "Defensif";
 
@@ -21,31 +21,35 @@ public class Defensif implements Strategie{
     }
 
 
-    
 
     /**
      * Implémentation de la méthode combattre.
+     * @param pionActeur Pion allant effectuer sa stratégie.
      */
     @Override
     public void combattre(Pion pionActeur){
-        //
+        //Variable x et ses bornes
         int x = 0;
         final int x_Min = 0;
         final int x_Max = 100;
 
-        //
+        //Le soin qui va être appliqué
         double heal = 0;
 
-
+        //Calcul si le soin est réussi ou non
         x = (int) Math.floor(Math.random()*(x_Max-x_Min+1)+x_Min);
         Boolean reussi = x >= 0 && x <= 20 + 6 * pionActeur.dexterite ? true : false;
 
+        //Si le soin est réussi
         if(reussi){
+            //Affichage de debug
             System.out.println("Soin de : " + pionActeur.getNom() + " du " + pionActeur.getJoueur().getNom() + " réussi.");
             //PreSet.tempo(1500);
-            //Recuperation du joueur qui a le moins de point de vie de son equipe.
+
+            //Récupération du pion avec le moins de vie de son équipe
             Pion pionCible = getPionCible(pionActeur);
 
+            //Génération d'un chiffre aléatoire entre ]0; 0.6]
             Random rand = new Random();
             double y = 0;
             while(true){
@@ -54,22 +58,26 @@ public class Defensif implements Strategie{
                     break;
                 }
             }
-            
-            System.out.println(y);
-            //PreSet.tempo(1500);
 
-
+            //Calcul du soin à appliquer
             heal = y * (10 + pionCible.constitution);
+
+            //Affichage de debug
             System.out.println("Soin de valeur : " + heal);
             //PreSet.tempo(1500);
 
+            //Affichage de debug
             System.out.println("Vie de " + pionCible.getNom() + " du " + pionCible.getJoueur().getNom() + " : " + pionCible.getECTS() + " avant.");
             //PreSet.tempo(1500);
+
             //Application du soin sur le pion cible.
-            pionCible.setECTS((int)heal);
+            pionCible.pionSoigne((int)heal);
+
+            //Affichage de debug
             System.out.println("Vie de " + pionCible.getNom() + " du " + pionCible.getJoueur().getNom() + " : " + pionCible.getECTS() + " après.");
             //PreSet.tempo(1500);
         } else{
+            //Affichage de debug
             System.out.println("Soin de : " + pionActeur.getNom() + " du " + pionActeur.getJoueur().getNom() + " raté.");
             //PreSet.tempo(1500);
         }
@@ -77,13 +85,14 @@ public class Defensif implements Strategie{
 
 
     /**
-     * Methode pour savoir quel pion sera effecte par la strategie.
-     * @param pionActeur
-     * @return pionCible
+     * Méthode pour savoir quel pion doit être soigné par le pion acteur.
+     * @param pionActeur Pion effectuant la stratégie.
+     * @return pionCible Pion auquel la stratégie sera executée.
      */
     public Pion getPionCible(Pion pionActeur){
         Pion pionCible = null;
 
+        //Récupération du pion avec le moins de vie en fonction du joueur auxquels ils appartiennent
         if(pionActeur.joueur.getNom().equals("Joueur 1")){
             pionCible = pionActeur.getZone().getLinkedListTeam1().getFirst();
         } else{
@@ -93,19 +102,10 @@ public class Defensif implements Strategie{
         return pionCible;
     }
 
-    
-    /**
-     * Methode pour recuperer le nom de la strategie.
-     * @return this.nom
-     */
-    public String getNom(){
-        return this.nom;
-    }
-
 
     /**
-     * Redefinition de la methode toString
-     * @return this.nom
+     * Redefinition de la methode toString.
+     * @return this.nom Nom de la stratégie.
      */
     @Override
     public String toString(){

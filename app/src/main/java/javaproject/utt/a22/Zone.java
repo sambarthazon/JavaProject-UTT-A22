@@ -2,6 +2,10 @@ package javaproject.utt.a22;
 
 import java.util.*;
 
+/**
+ * Classe Zone.
+ * Cette classe nous permettra de gérer les actions déroulées sur une zone.
+ */
 public class Zone{
 
     /**
@@ -15,7 +19,7 @@ public class Zone{
     private NomZone nom;
 
     /**
-     * Attribut indiquant l'appelation de la zone.
+     * Attribut indiquant l'appélation de la zone.
      */
     private String label;
 
@@ -30,17 +34,17 @@ public class Zone{
     private boolean isFirst = true;
 
     /**
-     * Liste de pion de la zone (triee par initiative par ordre decroissant).
+     * Liste de pions de la zone (triée par initiative par ordre décroissant).
      */
     private LinkedList<Pion> linkedPion = new LinkedList<Pion>();
 
     /**
-     * Liste de pion de la team 1 present sur la zone (triee par ECTS par ordre decroissant).
+     * Liste de pions de la team 1 presents sur la zone (triée par ECTS par ordre croissant).
      */
     private LinkedList<Pion> linkedPionTeam1 = new LinkedList<Pion>();
 
     /**
-     * Liste de pion de la team 2 present sur la zone (triee par ECTS par ordre decroissant).
+     * Liste de pions de la team 2 présents sur la zone (triée par ECTS par ordre croissant).
      */
     private LinkedList<Pion> linkedPionTeam2 = new LinkedList<Pion>();
 
@@ -63,6 +67,9 @@ public class Zone{
 
     /**
      * Constructeur de la classe Zone.
+     * @param partie Partie de la zone.
+     * @param nomZone Nom de la zone.
+     * @param label Label de la zone.
      */
     public Zone(Partie partie, NomZone nomZone, String label){
         this.partie = partie;
@@ -82,7 +89,7 @@ public class Zone{
 
     /**
      * Methode pour recuperer la partie de la zone.
-     * @return this.partie
+     * @return this.partie Partie où la zone est présente.
      */
     public Partie getPartie(){
         return this.partie;
@@ -98,7 +105,8 @@ public class Zone{
 
     /**
      * Methode pour recuperer le nom de la zone.
-     * @return this.nom
+     * Les noms sont visibles dans l'énumération NomZone.
+     * @return this.nom Nom de la zone.
      */
     public NomZone getNomZone(){
         return this.nom;
@@ -106,7 +114,7 @@ public class Zone{
 
     /**
      * Methode pour recuperer le label de la zone.
-     * @return this.label
+     * @return this.label Label de la zone.
      */
     public String getLabel(){
         return this.label;
@@ -123,7 +131,7 @@ public class Zone{
     /**
      * Methode pour changer le status de la zone.
      * 1 pour controlée et 0 pour non controlée.
-     * @param status
+     * @param status Status que nous voulons mettre à la zone.
      */
     public void setStatus(boolean status){
         this.estControlee = status;
@@ -131,7 +139,7 @@ public class Zone{
 
     /**
      * Methode pour recuperer le status de la zone.
-     * @return this.status
+     * @return this.status Status de la zone (controlée ou non).
      */
     public boolean getStatus(){
         return this.estControlee;
@@ -149,13 +157,15 @@ public class Zone{
      * Methode pour ajouter le pion a la liste globale (linkedPion).
      * Si le pion appartient au "Joueur 1", ajout de ce pion dans sa liste.
      * Si le pion appartient au "Joueur 2", ajout de ce pion dans sa liste.
-     * @param pion
+     * @param pion Pion a ajouter à la zone.
      */
     public void addPion(Pion pion){
+        //Ajout du pion dans la liste globale
         if(!this.linkedPion.contains(pion)){
             this.linkedPion.add(pion);
         }
 
+        //Ajout du pion dans sa collection correspondante
         if(pion.getJoueur().getNom().equals("Joueur 1")){
             if(!this.linkedPionTeam1.contains(pion)){
                 this.linkedPionTeam1.add(pion);
@@ -168,11 +178,12 @@ public class Zone{
     }
 
     /**
-     * Methode pour retirer le pion de la zone.
+     * Méthode pour retirer le pion de la zone.
      * Cela retirera le pion de "linkedPion" et "linkedPionTeam1" ou "linkedPionTeam2".
-     * @param pion
+     * @param pion Pion a retiré de la zone.
      */
     public void removePion(Pion pion){
+        //Verification si le pion appartient au joueur 1 ou au joueur 2
         if(pion.getJoueur().getNom().equals("Joueur 1")){
             if(this.linkedPionTeam1.contains(pion)){
                 this.linkedPionTeam1.remove(pion);
@@ -183,6 +194,7 @@ public class Zone{
             }
         }
 
+        //Retrait du pion de la liste globale
         if(this.linkedPion.contains(pion)){
             this.linkedPion.remove(pion);
             pion.setZone(null);
@@ -198,7 +210,7 @@ public class Zone{
     //******************************************************//
 
     /**
-     * Methode pour trier la liste de la zone par initiative (plus grand au plus petit).
+     * Méthode pour trier la liste de la zone par initiative (plus grand au plus petit).
      */
     public void sortLinkedPion(){
         Collections.sort(linkedPion, new Comparator<Pion>(){
@@ -210,8 +222,8 @@ public class Zone{
     }
 
     /**
-     * Methode pour récuperer la liste de pion présent dans la zone.
-     * @return
+     * Méthode pour récuperer la liste de pion présent dans la zone.
+     * @return this.linkedPion Liste globale des pions présents sur la zone.
      */
     public LinkedList<Pion> getLinkedPion(){
         return this.linkedPion;
@@ -226,32 +238,33 @@ public class Zone{
     //******************************************************//
 
     /**
-     * Methode pour recuperer les ECTS de la team 1 sur la zone.
-     * @return 
+     * Méthode pour récuperer les ECTS de la team 1 sur la zone.
+     * @return ECTSTotal Vie totale de la team 1 sur la zone.
      */
     public int getECTSTeam1(){
         int ECTSTotal = 0;
         Pion pion = null;
         
+        //Itération sur la liste de l'équipe 1
         Iterator<Pion> it = this.linkedPionTeam1.iterator();
         while(it.hasNext()){
             pion = it.next();
-            ECTSTotal += pion.getECTS();;
+            ECTSTotal += pion.getECTS(); //On ajoute les ECTS de l'étudiant itéré
         }
 
         return ECTSTotal;
     }
 
     /**
-     * Methode pour recuperer la liste des pions de la team 1.
-     * @return this.linkedPionTeam1
+     * Méthode pour récuperer la liste des pions de la team 1.
+     * @return this.linkedPionTeam1 Liste de pion de la team 1 sur la zone.
      */
     public LinkedList<Pion> getLinkedListTeam1(){
         return this.linkedPionTeam1;
     }
 
     /**
-     * Methode pour trier la liste de la team 1 par ECTS (plus petit au plus grand).
+     * Méthode pour trier la liste de la team 1 par ECTS (plus petit au plus grand).
      */
     public void sortLinkedPionTeam1(){
         Collections.sort(linkedPionTeam1, new Comparator<Pion>(){
@@ -271,32 +284,33 @@ public class Zone{
     //******************************************************//
 
     /**
-     * Methode pour recuperer les ECTS de la team 2 sur la zone.
+     * Méthode pour recuperer les ECTS de la team 2 sur la zone.
+     * @return ECTSTotal Vie totale de la team 2 sur la zone.
      */
     public int getECTSTeam2(){
         int ECTSTotal = 0;
         Pion pion = null;
         
+        //Iteration sur la liste de l'équipe 2
         Iterator<Pion> it = this.linkedPionTeam2.iterator();
         while(it.hasNext()){
             pion = it.next();
-            ECTSTotal += pion.getECTS();;
+            ECTSTotal += pion.getECTS(); //On ajoute les ECTS de l'étudiant itéré
         }
 
         return ECTSTotal;
     }
 
     /**
-     * Methode pour recuperer la liste des pions de la team 2.
-     * @return this.linkedPionTeam2
+     * Méthode pour récuperer la liste des pions de la team 2.
+     * @return this.linkedPionTeam2 Liste de pion de la team 2 sur la zone.
      */
     public LinkedList<Pion> getLinkedListTeam2(){
         return this.linkedPionTeam2;
     }
 
     /**
-     * Methode pour trier la liste de la team 2 par ECTS (plus petit au plus grand).
-     * FONCTIONNEL
+     * Méthode pour trier la liste de la team 2 par ECTS (plus petit au plus grand).
      */
     public void sortLinkedPionTeam2(){
         Collections.sort(linkedPionTeam2, new Comparator<Pion>(){
@@ -316,49 +330,66 @@ public class Zone{
     //******************************************************//
 
     /**
-     * Methode pour lancer la methode run pour le multi-threading.
+     * Méthode pour lancer une boucle de combat sur la zone.
      */
     public void combattre(){
+        //Si les deux équipes sont présentes, le combat est lancé.
         if(this.getECTSTeam1() > 0 && this.getECTSTeam2() > 0){
-            this.init();
+            //Si la zone était controlée, nous la réinitialison
+            if(this.estControlee){
+                this.init();
+            }
+
+            //Affichage de debug
             PreSet.setTerminal();
             System.out.println("Combat zone : " + this.label);
             System.out.println(this.linkedPion);
             //PreSet.tempo(2500);
 
-            this.firstTour();
+            //Si nous somme au premier tour, nous trions les listes
+            if(this.isFirst){
+                this.firstTour();
+            }
             
+            //Le premier pion de la liste global combat
             Pion pionActeur = this.linkedPion.getFirst();
-            pionActeur.executerStrategie();
+            pionActeur.executerStrategie(); //Attaque sur le plus faible pion adverse ou soigne le plus faible pion allié
 
+            //Le pion attaquant passe en dernier de la liste globale.
             linkedPion.removeFirst();
             linkedPion.addLast(pionActeur);
 
+            //Vérification si un pion est mort.
             this.pionMort();
         }
     }
 
-
+    /**
+     * Méthode pour l'initialisation de la zone.
+     */
     public void init(){
-        this.estControlee = false;
+        this.estControlee = false; //La zone n'est plus controlée
+
+        //La zone est retirée à tous les joueurs
         this.partie.getListJoueur().get(0).removeZoneControlee(this);
         this.partie.getListJoueur().get(1).removeZoneControlee(this);
     }
 
     /**
-     * Methode pour organiser les listes au premier tour de combat.
+     * Méthode pour organiser les listes au premier tour de combat.
+     * La liste globale sera triée par initiative (plus grand au plus petit).
+     * Une liste par joueur qui seront triées par ECTS (plus petit au plus grand).
      */
     public void firstTour(){
-        if(isFirst){
-            this.sortLinkedPion();
-            this.sortLinkedPionTeam1();
-            this.sortLinkedPionTeam2();
-            isFirst = false;
-        }
+        this.sortLinkedPion();
+        this.sortLinkedPionTeam1();
+        this.sortLinkedPionTeam2();
+        isFirst = false;
     }
 
     /**
-     * Methode pour gérer les pions morts.
+     * Méthode de vérification d'un pion mort.
+     * Si un pion de la zone n'a plus de vie, il est retiré de la zone. Cela provoque une vérification d'une trêve.
      */
     public void pionMort(){
         Pion pion = null;
@@ -380,21 +411,25 @@ public class Zone{
     }
 
     /**
-     * Methode pour mettre en trève la zone.
+     * Méthode de vérification de trêve de la zone.
+     * Si un des deux joueurs n'a plus de pions sur la zone, la zone est obtenue par l'adversaire.
      */
     public void enTreve(){
+        //Affichage de debug
         System.out.println("Est ce qu'il vas y avoir une treve ?");
         PreSet.tempo(1000);
-        if(this.getECTSTeam1() == 0){
+
+        //Verification
+        if(this.getECTSTeam1() == 0){ //Si le joueur 1 n'a plus de pions
             System.out.println("La zone est controlee par l'equipe 2 car les ects de l'equipe 1 sont : " + this.getECTSTeam1());
-            this.estControlee = true;
-            this.partie.getListJoueur().get(1).addZoneControlee(this);
-            this.partie.setStatus(StatusPartie.Treve);
-        } else if(this.getECTSTeam2() == 0){
+            this.estControlee = true; //La zon devient controlée
+            this.partie.getListJoueur().get(1).addZoneControlee(this); //Le joueur adverse obtient la zone
+            this.partie.setStatus(StatusPartie.Treve); //La partie est en mode trêve
+        } else if(this.getECTSTeam2() == 0){ //Si le joueur 2 n'a plus de pions
             System.out.println("La zone est controlee par l'equipe 1 car les ects de l'equipe 2 sont : " + this.getECTSTeam2());
-            this.estControlee = true;
-            this.partie.getListJoueur().get(0).addZoneControlee(this);
-            this.partie.setStatus(StatusPartie.Treve);
+            this.estControlee = true; //La zone devient controlée
+            this.partie.getListJoueur().get(0).addZoneControlee(this); //Le joueur adverse obtient la zone
+            this.partie.setStatus(StatusPartie.Treve); //La partie est en mode trêve
         }
     }
 

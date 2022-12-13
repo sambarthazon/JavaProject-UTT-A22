@@ -65,6 +65,8 @@ public class Elite extends Pion{
     
     /**
      * Constructeur de la classe Elite.
+     * @param joueur Joueur de l'Etudiant d'Elite.
+     * @param nom Nom de l'Etudiant d'Elite.
      */
     public Elite(Joueur joueur, String nom){
         this.joueur = joueur;
@@ -89,8 +91,8 @@ public class Elite extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la dexterite minimum d'un Etudiant d'Elite.
-     * @return this.minDexterite
+     * Méthode pour récuperer la dextérite minimum d'un "Etudiant d'Elite".
+     * @return this.minDexterite Valeur minimum de la dextérité que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMinDexterite(){
@@ -98,8 +100,8 @@ public class Elite extends Pion{
     }
 
     /**
-     * Methode pour recuperer la dexterite maximum d'un Etudiant d'Elite.
-     * @return this.maxDexterite
+     * Méthode pour récuperer la dextérite maximum d'un "Etudiant d'Elite".
+     * @return this.maxDexterite Valeur maximum de la dextérité que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMaxDexterite(){
@@ -115,8 +117,8 @@ public class Elite extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la force minimum d'un Etudiant d'Elite.
-     * @return this.minForce
+     * Méthode pour récuperer la force minimum d'un "Etudiant d'Elite".
+     * @return this.minForce Valeur minimum de la force que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMinForce(){
@@ -124,8 +126,8 @@ public class Elite extends Pion{
     }
 
     /**
-     * Methode pour recuperer la force maximum d'un Etudiant d'Elite.
-     * @return this.maxForce
+     * Methode pour recuperer la force maximum d'un "Etudiant d'Elite".
+     * @return this.maxForce Valeur maximum de la force que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMaxForce(){
@@ -141,8 +143,8 @@ public class Elite extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la resistance minimum d'un Etudiant d'Elite.
-     * @return this.minResistance
+     * Methode pour recuperer la resistance minimum d'un "Etudiant d'Elite".
+     * @return this.minResistance Valeur minimum de la résistance que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMinResistance(){
@@ -150,8 +152,8 @@ public class Elite extends Pion{
     }
 
     /**
-     * Methode pour recuperer la resistance maximum d'un Etudiant d'Elite.
-     * @return this.maxResistance
+     * Methode pour recuperer la resistance maximum d'un "Etudiant d'Elite".
+     * @return this.maxResistance Valeur résistance de la dextérité que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMaxResistance(){
@@ -167,8 +169,8 @@ public class Elite extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la constitution minimum d'un Etudiant d'Elite.
-     * @return this.minConstitution
+     * Methode pour recuperer la constitution minimum d'un "Etudiant d'Elite".
+     * @return this.minConstitution Valeur minimum de la constitution que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMaxConstitution(){
@@ -176,8 +178,8 @@ public class Elite extends Pion{
     }
 
     /**
-     * Methode pour recuperer la constitution maximum d'un Etudiant d'Elite.
-     * @return this.maxConstitution
+     * Methode pour recuperer la constitution maximum d'un "Etudiant d'Elite".
+     * @return this.maxConstitution Valeur maximum de la constitution que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMinConstitution(){
@@ -193,8 +195,8 @@ public class Elite extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer l'initiative minimum d'un Etudiant d'Elite.
-     * @return this.minInitiative
+     * Methode pour recuperer l'initiative minimum d'un "Etudiant d'Elite".
+     * @return this.minInitiative Valeur minimum de l'initiative que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMinInitiative(){
@@ -202,8 +204,8 @@ public class Elite extends Pion{
     }
 
     /**
-     * Methode pour recuperer l'initiative maximum d'un Etudiant d'Elite.
-     * @return this.maxInitiative
+     * Methode pour recuperer l'initiative maximum d'un "Etudiant d'Elite".
+     * @return this.maxInitiative Valeur maximum de l'initiative que l'"Etudiant d'Elite" peut avoir.
      */
     @Override
     public int getMaxInitiative(){

@@ -6,7 +6,7 @@ package javaproject.utt.a22;
 public class Aleatoire implements Strategie{
 
     /**
-     * Nom de la strategie.
+     * Attribut indiquant le nom de la strategie.
      */
     private final String nom = "Aléatoire";
     
@@ -20,13 +20,12 @@ public class Aleatoire implements Strategie{
 
     /**
      * Implementation de la methode combattre.
+     * @param pionActeur Pion allant effectuer sa stratégie.
      */
     @Override
     public void combattre(Pion pionActeur){
-        //Une chance sur deux pour etre attaquant ou defenseur.
-        double trueFalse = Math.round(Math.random());
-
-        if(trueFalse == 1){ //Attaquant
+        //Choix aléatoire entre attaquant ou défenseur
+        if(Math.random() < 0.5){ //Attaquant
             pionActeur.setStrategie(new Offensif());
             pionActeur.executerStrategie();
         } else{ //Defenseur
@@ -40,17 +39,8 @@ public class Aleatoire implements Strategie{
 
 
     /**
-     * Methode pour recuperer le nom de la strategie.
-     * @return this.nom
-     */
-    public String getNom(){
-        return this.nom;
-    }
-
-
-    /**
-     * Redefinition de la methode toString
-     * @return this.nom
+     * Redefinition de la methode toString.
+     * @return this.nom Nom de la stratégie.
      */
     @Override
     public String toString(){

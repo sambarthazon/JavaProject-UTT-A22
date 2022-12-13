@@ -48,7 +48,7 @@ public class Joueur{
     /**
      * Liste des zones controlee par le joueur.
      */
-    private ArrayList<Zone> setZoneControlee = new ArrayList<Zone>();
+    private Set<Zone> setZoneControlee = new HashSet<Zone>();
 
 
     /**
@@ -69,6 +69,8 @@ public class Joueur{
 
     /**
      * Constructeur de la classe Joueur.
+     * @param partie Partie du joueur.
+     * @param nom Nom du joueur.
      */
     public Joueur(Partie partie, String nom){
         this.partie = partie;
@@ -86,8 +88,8 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour recuperer le nom du joueur.
-     * @return this.nom
+     * Méthode pour récuperer le nom du joueur.
+     * @return this.nom Nom du joueur.
      */
     public String getNom(){
         return this.nom;
@@ -102,8 +104,8 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la partie du joueur.
-     * @return this.partie
+     * Méthode pour récuperer la partie du joueur.
+     * @return this.partie Partie du joueur.
      */
     public Partie getPartie(){
         return this.partie;
@@ -118,9 +120,9 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour ajouter des points au joueur.
-     * Le nombre de point que le joueur possede (point) ne peut pas etre superieur le maximum fixe (maxPoint).
-     * @param point
+     * Méthode pour ajouter des points au joueur.
+     * Le nombre de point que le joueur possède ne peut pas etre supérieur le maximum fixé (maxPoint).
+     * @param point Points ajoutés au joueur.
      */
     public void ajouterPoint(int point){
         this.point += point;
@@ -130,9 +132,9 @@ public class Joueur{
     }
 
     /**
-     * Methode pour retirer des point au joueur.
-     * Le nombre de point que le joueur possede (point) ne peut pas etre inferieur au minimum fixe (minPoint).
-     * @param point
+     * Méthode pour retirer des point au joueur.
+     * Le nombre de point que le joueur possède ne peut pas etre inférieur au minimum fixé (minPoint).
+     * @param point Points retirés au joueur.
      */
     public void retirerPoint(int point){
         this.point -= point;
@@ -142,8 +144,8 @@ public class Joueur{
     }
 
     /**
-     * Methode pour recuperer le nombre de point que le joueur possede.
-     * @return this.point
+     * Méthode pour récuperer le nombre de point que le joueur possède.
+     * @return this.point Points du joueur.
      */
     public int getPoint(){
         return this.point;
@@ -158,17 +160,17 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour changer l'equipe du joueur.
+     * Méthode pour changer l'équipe du joueur.
      * Les equipes sont visibles dans l'enumeration "NomEquipe".
-     * @param equipe
+     * @param equipe Equipe attribuée au joueur.
      */
     public void setEquipe(NomEquipe equipe){
         this.equipe = equipe;
     }
 
     /**
-     * Methode pour recuperer l'equipe du joueur.
-     * @return this.equipe
+     * Méthode pour récuperer l'équipe du joueur.
+     * @return this.equipe Equipe du joueur.
      */
     public NomEquipe getEquipe(){
         return this.equipe;
@@ -183,16 +185,16 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour changer le status du joueur.
+     * Méthode pour changer le status du joueur.
      * Les status sont visibles dans l'enumeration "StatusJoueur".
-     * @param status
+     * @param status Status appliqué au joueur.
      */
     public void setStatus(StatusJoueur status){
         this.status = status;
     }
 
     /**
-     * Methode pour recuperer le status du joueur.
+     * Méthode pour récuperer le status du joueur.
      * @return this.status
      */
     public StatusJoueur getStatus(){
@@ -208,9 +210,9 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour ajouter un pion dans la liste.
-     * Verification que la liste du joueur ne contient pas deja ce pion.
-     * @param pion
+     * Méthode pour ajouter un pion dans la liste.
+     * Vérification que la liste du joueur ne contient pas déjà ce pion.
+     * @param pion Pion à ajouter au joueur.
      */
     public void addPion(Pion pion){
         if(!this.arrayPion.contains(pion)){
@@ -219,9 +221,9 @@ public class Joueur{
     }
 
     /**
-     * Methode pour retirer un pion de la liste.
-     * Verification que la liste du joueur contient se pion.
-     * @param pion
+     * Méthode pour retirer un pion de la liste.
+     * Vérification que la liste du joueur contient ce pion.
+     * @param pion Pion à retirer au joueur.
      */
     public void removePion(Pion pion){
         if(this.arrayPion.contains(pion)){
@@ -230,26 +232,27 @@ public class Joueur{
     }
 
     /**
-     * Methode pour recuperer la liste de pion que le joueur possede.
-     * @return this.arrayPion
+     * Méthode pour récuperer la liste de pion que le joueur possède.
+     * @return this.arrayPion Liste de pions que le joueur possède.
      */
     public ArrayList<Pion> getListPion(){
         return this.arrayPion;
     }
 
     /**
-     * Methode pour recuperer le nombre de combattant que le joueur a.
-     * @return nbCombattant
+     * Méthode pour récuperer le nombre de combattant que le joueur a.
+     * @return nbCombattant Nombre de combattant dans la liste du joueur.
      */
     public int getNbCombattant(){
         int nbCombattant = 0;
         Pion pion = null;
 
+        //Itération sur la liste du joueur
         Iterator<Pion> it = this.arrayPion.iterator();
         while(it.hasNext()){
             pion = it.next();
-            if(pion.getStatus().equals(StatusPion.Combattant)){
-                nbCombattant ++;
+            if(pion.getStatus().equals(StatusPion.Combattant)){ //Si le joueur est combattant
+                nbCombattant ++; //Le nombre de combattant est incrémenté
             }
         }
 
@@ -265,19 +268,22 @@ public class Joueur{
     //******************************************************//
 
     /**
-     * Methode pour ajouter une zone controlee par le joueur dans le set de zone controlee (setZoneControlee).
-     * @param zone
+     * Méthode pour ajouter une zone controlée par le joueur dans la liste de zone controlée du joueur.
+     * @param zone Zone controlée par le joueur.
      */
     public void addZoneControlee(Zone zone){
+        //Affichage de débug
         System.out.println("Ajout de " + zone + " au " + this.nom);
         PreSet.tempo(5000);
+
+        //Ajout de la zone au joueur
         this.setZoneControlee.add(zone);
     }
 
     /**
-     * Methode pour retirer une zone controlee par le joueur du set de zone controlee (setZoneControlee).
-     * Verification que la liste des zones contient cette zone.
-     * @param zone
+     * Méthode pour retirer une zone controlée par le joueur de la liste de zone controlée du joueur.
+     * Vérification que la liste des zones contient cette zone.
+     * @param zone Zone plus controlée par le joueur.
      */
     public void removeZoneControlee(Zone zone){
         if(this.setZoneControlee.contains(zone)){
@@ -286,10 +292,10 @@ public class Joueur{
     }
 
     /**
-     * Methode pour recuperer les zones que le joueur possede.
-     * @return this.setZoneControlee
+     * Méthode pour récuperer les zones que le joueur possède.
+     * @return this.setZoneControlee Liste des zones controlée.s par le joueur.
      */
-    public ArrayList<Zone> getZoneControlee(){
+    public Set<Zone> getZoneControlee(){
         return this.setZoneControlee;
     }
 }

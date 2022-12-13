@@ -1,26 +1,19 @@
 package javaproject.utt.a22;
 
 /**
- * Interface strategie permettant au pion de combattre.
+ * Interface stratégie permettant au pion de combattre.
  */
 public interface Strategie{
 
     /**
-     * Methode permettant au pion de combattre.
+     * Méthode permettant au pion de combattre.
      */
     public void combattre(Pion pionActeur);
 
 
     /**
-     * Methode pour recuperer le nom de la strategie.
-     * @return this.nom
-     */
-    public String getNom();
-
-
-    /**
-     * Redefinition de la methode toString
-     * @return this.nom
+     * Redéfinition de la methode toString.
+     * @return this.nom Nom de la stratégie.
      */
     @Override
     public String toString();

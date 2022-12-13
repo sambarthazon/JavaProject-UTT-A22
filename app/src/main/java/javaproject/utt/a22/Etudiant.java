@@ -64,7 +64,9 @@ public class Etudiant extends Pion{
     //******************************************************//
 
     /**
-     * Constructeur de la classe Etudiant.
+     * Constrcuteur de la classe Etudiant.
+     * @param joueur Joueur de l'Etudiant.
+     * @param nom Nom de l'Etudiant.
      */
     public Etudiant(Joueur joueur, String nom){
         this.joueur = joueur;
@@ -89,8 +91,8 @@ public class Etudiant extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la dexterite minimum d'un Etudiant.
-     * @return this.minDexterite
+     * Methode pour recuperer la dexterite minimum d'un "Etudiant".
+     * @return this.minDexterite Valeur minimum de la dextérité que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMinDexterite(){
@@ -98,8 +100,8 @@ public class Etudiant extends Pion{
     }
 
     /**
-     * Methode pour recuperer la dexterite maximum d'un Etudiant.
-     * @return this.maxDexterite
+     * Methode pour recuperer la dexterite maximum d'un "Etudiant".
+     * @return this.maxDexterite Valeur maximum de la dextérité que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMaxDexterite(){
@@ -115,8 +117,8 @@ public class Etudiant extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la force minimum d'un Etudiant.
-     * @return this.minForce
+     * Methode pour recuperer la force minimum d'un "Etudiant".
+     * @return this.minForce Valeur minimum de la force que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMinForce(){
@@ -124,8 +126,8 @@ public class Etudiant extends Pion{
     }
 
     /**
-     * Methode pour recuperer la force maximum d'un Etudiant.
-     * @return this.maxForce
+     * Methode pour recuperer la force maximum d'un "Etudiant".
+     * @return this.maxForce Valeur maximum de la force que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMaxForce(){
@@ -141,8 +143,8 @@ public class Etudiant extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la resistance minimum d'un Etudiant.
-     * @return this.minResistance
+     * Methode pour recuperer la resistance minimum d'un "Etudiant".
+     * @return this.minResistance Valeur minimum de la résistance que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMinResistance(){
@@ -150,8 +152,8 @@ public class Etudiant extends Pion{
     }
 
     /**
-     * Methode pour recuperer la resistance maximum d'un Etudiant.
-     * @return this.maxResistance
+     * Methode pour recuperer la resistance maximum d'un "Etudiant".
+     * @return this.maxResistance Valeur maximum de la résistance que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMaxResistance(){
@@ -167,8 +169,8 @@ public class Etudiant extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la constitution minimum d'un Etudiant.
-     * @return this.minConstitution
+     * Methode pour recuperer la constitution minimum d'un "Etudiant".
+     * @return this.minConstitution Valeur minimum de la constitution que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMaxConstitution(){
@@ -176,8 +178,8 @@ public class Etudiant extends Pion{
     }
 
     /**
-     * Methode pour recuperer la constitution maximum d'un Etudiant.
-     * @return this.maxConstitution
+     * Methode pour recuperer la constitution maximum d'un "Etudiant".
+     * @return this.maxConstitution Valeur maximum de la constitution que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMinConstitution(){
@@ -193,8 +195,8 @@ public class Etudiant extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer l'initiative minimum d'un Etudiant.
-     * @return this.minInitiative
+     * Methode pour recuperer l'initiative minimum d'un "Etudiant".
+     * @return this.minInitiative Valeur minimum de l'initiative que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMinInitiative(){
@@ -202,8 +204,8 @@ public class Etudiant extends Pion{
     }
 
     /**
-     * Methode pour recuperer l'initiative maximum d'un Etudiant.
-     * @return this.maxInitiative
+     * Methode pour recuperer l'initiative maximum d'un "Etudiant".
+     * @return this.maxInitiative Valeur maximum de l'initiative que l'"Etudiant" peut avoir.
      */
     @Override
     public int getMaxInitiative(){

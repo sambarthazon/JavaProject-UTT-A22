@@ -65,6 +65,8 @@ public class Maitre extends Pion{
 
     /**
      * Constructeur de la classe Maitre.
+     * @param joueur Joueur du maitre.
+     * @param nom Nom du maitre.
      */
     public Maitre(Joueur joueur, String nom){
         this.joueur = joueur;
@@ -89,8 +91,8 @@ public class Maitre extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la dexterite minimum d'un Maitre du Gobi.
-     * @return this.minDexterite
+     * Méthode pour récuperer la dextérité minimum d'un "Maître du Gobi".
+     * @return this.minDexterite Valeur minimum de la dextérité que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMinDexterite(){
@@ -98,8 +100,8 @@ public class Maitre extends Pion{
     }
 
     /**
-     * Methode pour recuperer la dexterite maximum d'un Maitre du Gobi.
-     * @return this.maxDexterite
+     * Méthode pour récuperer la dextérité maximum d'un "Maitre du Gobi".
+     * @return this.maxDexterite Valeur maximum de la dextérité que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMaxDexterite(){
@@ -115,8 +117,8 @@ public class Maitre extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la force minimum d'un Maitre du Gobi.
-     * @return this.minForce
+     * Méthode pour récuperer la force minimum d'un "Maître du Gobi".
+     * @return this.minForce Valeur minimum de la force que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMinForce(){
@@ -124,8 +126,8 @@ public class Maitre extends Pion{
     }
 
     /**
-     * Methode pour recuperer la force maximum d'un Maitre du Gobi.
-     * @return this.maxForce
+     * Méthode pour récuperer la force maximum d'un "Maître du Gobi".
+     * @return this.maxForce Valeur maximum de la force que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMaxForce(){
@@ -141,8 +143,8 @@ public class Maitre extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la resistance minimum d'un Maitre du Gobi.
-     * @return this.minResistance
+     * Méthode pour récuperer la r"sistance minimum d'un "Maître du Gobi".
+     * @return this.minResistance Valeur minimum de la résistance que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMinResistance(){
@@ -150,8 +152,8 @@ public class Maitre extends Pion{
     }
 
     /**
-     * Methode pour recuperer la resistance maximum d'un Maitre du Gobi.
-     * @return this.maxResistance
+     * Méthode pour récuperer la résistance maximum d'un "Maître du Gobi".
+     * @return this.maxResistance Valeur maximum de la résistance que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMaxResistance(){
@@ -167,8 +169,8 @@ public class Maitre extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer la constitution minimum d'un Maitre du Gobi.
-     * @return this.minConstitution
+     * Méthode pour récupérer la constitution minimum d'un "Maître du Gobi".
+     * @return this.minConstitution Valeur minimum de la constitution que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMaxConstitution(){
@@ -176,8 +178,8 @@ public class Maitre extends Pion{
     }
 
     /**
-     * Methode pour recuperer la constitution maximum d'un Maitre du Gobi.
-     * @return this.maxConstitution
+     * Méthode pour récuperer la constitution maximum d'un "Maître du Gobi".
+     * @return this.maxConstitution Valeur maximum de la constitution que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMinConstitution(){
@@ -193,8 +195,8 @@ public class Maitre extends Pion{
     //******************************************************//
 
     /**
-     * Methode pour recuperer l'initiative minimum d'un Maitre du Gobi.
-     * @return this.minInitiative
+     * Méthode pour récuperer l'initiative minimum d'un "Maître du Gobi".
+     * @return this.minInitiative Valeur minimum de l'initiative que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMinInitiative(){
@@ -202,8 +204,8 @@ public class Maitre extends Pion{
     }
 
     /**
-     * Methode pour recuperer l'initiative maximum d'un Maitre du Gobi.
-     * @return this.maxInitiative
+     * Méthode pour récuperer l'initiative maximum d'un Maitre du Gobi.
+     * @return this.maxInitiative Valeur maximum de l'initiative que le "Maître du Gobi" peut avoir.
      */
     @Override
     public int getMaxInitiative(){

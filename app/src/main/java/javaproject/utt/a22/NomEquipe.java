@@ -1,6 +1,5 @@
 package javaproject.utt.a22;
 
-
 /**
  * Enumeration des equipes disponibles pour le joueur.
  */
