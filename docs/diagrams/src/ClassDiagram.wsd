@@ -1,0 +1,288 @@
+@startuml
+
+/'
+*****************************************
+*                                       *
+*               Combattants             *
+*                                       *
+*****************************************
+'/
+
+abstract class Pion{
+    # nom : String
+    # ECTS : int
+    # ECTSDefault : int
+    # ECTSMax : int
+    # ECTSMin : int
+    # dexterite : int
+    # force : int
+    # resistance : int
+    # constitution : int
+    # initiative : int
+    __
+    + Pion()
+    + executerStrategie() : void
+    + toString() : String
+    ..Getters..
+    ..Setters..
+}
+
+class Etudiant{
+    - minDexterite : int
+    - maxDexterite : int
+    - minForce : int
+    - maxForce : int
+    - minResistance : int
+    - maxResistance : int
+    - minConstitution : int
+    - maxConstitution : int
+    - minInitiative : int
+    - maxInitiative : int
+    __
+    + Etudiant(Joueur joueur, String nom)
+    ..Getters..
+    ..Setters..
+}
+
+class Elite{
+    - minDexterite : int
+    - maxDexterite : int
+    - minForce : int
+    - maxForce : int
+    - minResistance : int
+    - maxResistance : int
+    - minConstitution : int
+    - maxConstitution : int
+    - minInitiative : int
+    - maxInitiative : int
+    __
+    + Elite(Joueur joueur, String nom)
+    ..Getters..
+    ..Setters..
+}
+
+class Maitre{
+    - minDexterite : int
+    - maxDexterite : int
+    - minForce : int
+    - maxForce : int
+    - minResistance : int
+    - maxResistance : int
+    - minConstitution : int
+    - maxConstitution : int
+    - minInitiative : int
+    - maxInitiative : int
+    __
+    + Maitre(Joueur joueur, String nom)
+    ..Getters..
+    ..Setters..
+}
+
+Pion <|-- Etudiant
+Pion <|-- Elite
+Pion <|-- Maitre
+
+/'
+*****************************************
+*                                       *
+*                Stratégie              *
+*                                       *
+*****************************************
+'/
+
+interface Strategie{
+    + combattre(Pion pionActeur) : void
+    + toString() : String
+}
+
+class Offensif{
+    - nom : String
+    __
+    + combattre(Pion pionActeur) : void
+    + min(int forceActeur, int resistanceCible) : double
+    + max(double valeurAComparer) : double
+    + getPionCible(Pion pionActeur) : Pion
+    + toString() : String
+}
+
+class Defensif{
+    - nom : String
+    __
+    + combattre(Pion pionActeur) : void
+    + getPionCible(Pion pionActeur) : Pion
+    + toString() : String
+}
+
+class Aleatoire{
+    - nom : String
+    __
+    + combattre(Pion pionActeur) : void
+    + toString() : String
+}
+
+class Preferentielle{
+    - nom : String
+    __
+    + combattre(Pion pionActeur) : void
+    + toString() : String
+}
+
+Offensif ..|> Strategie
+Defensif ..|> Strategie
+Aleatoire ..|> Strategie
+Preferentielle ..|> Strategie
+
+
+/'
+*****************************************
+*                                       *
+*                 Joueur                *
+*                                       *
+*****************************************
+'/
+
+class Joueur{
+    - nom : String
+    - point : int
+    - minPoint : int
+    - maxPoint : int
+    __
+    + Joueur(Partie partie, String nom)
+    ..Getters..
+    ..Setters..
+    ..Adders..
+    ..Removers..
+}
+
+
+/'
+*****************************************
+*                                       *
+*                 Partie                *
+*                                       *
+*****************************************
+'/
+
+class Partie{
+    + {static} NOM_JOUEUR1 : String
+    + {static} NOM_JOUEUR2 : String
+    __
+    + {static} main(String[] args) : void
+    + Partie()
+    + lancement()
+    + pionMort(Pion pion) : void
+    ..Parametrage..
+    ..Getters..
+    ..Setters..
+    ..Adders..
+    ..Removers..
+}
+
+class PreSet{
+    + {static} main(String[] args) : void
+    + {static} setTerminal() : void
+    + {static} clearConsole() : void
+    + {static} tempo(int time) : void
+}
+
+
+/'
+*****************************************
+*                                       *
+*                 Zone                  *
+*                                       *
+*****************************************
+'/
+
+class Zone{
+    - label : String
+    - estControlee : boolean
+    - isFirst : boolean
+    __
+    + Zone(Partie partie, NomZone nomZone, String label)
+    + sortLinkedPion() : void
+    + sortLinkedPionTeam1() : void
+    + sortLinkedPionTeam2() : void
+    + combattre() : void
+    + init() : void
+    + firstTour() : void
+    + pionMort() : void
+    + enTreve() : void
+    + toString() : String
+    ..Getters..
+    ..Setters..
+    ..Adders..
+    ..Removers..
+}
+
+
+/'
+*****************************************
+*                                       *
+*              Enumérations             *
+*                                       *
+*****************************************
+'/
+
+enum NomEquipe{
+    A2I
+    ISI
+    GI
+    GM
+    MM
+    MTE
+    RT
+}
+
+enum NomZone{
+    BU
+    BDE
+    QuartierAdministratif
+    HalleIndustrielle
+    HalleSportive
+}
+
+enum StatusJoueur{
+    Preparation
+    Ready
+}
+
+enum StatusPartie{
+    Preparation
+    Combat
+    Treve
+    Terminee
+}
+
+enum StatusPion{
+    Reserviste
+    Combattant
+}
+
+
+/'
+*****************************************
+*                                       *
+*                 Liaisons              *
+*                                       *
+*****************************************
+'/
+
+Pion --> "1" Strategie
+Pion --> "1" StatusPion
+
+Joueur "1" --> "0..20" Pion
+Joueur --> "1" NomEquipe
+Joueur --> "1" StatusJoueur
+Joueur o--> "0..3" Zone
+
+Partie "1" *--> "2" Joueur
+Partie "1" *--> "5" Zone
+Partie --> "1" StatusPartie
+
+Zone "1" o--> "many" Pion
+Zone "1" o--> "many" Pion
+Zone "1" o--> "many" Pion
+Zone --> "1" NomZone
+
+@enduml
