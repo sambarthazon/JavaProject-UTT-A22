@@ -1,5 +1,9 @@
 package javaproject.utt.a22;
 
+/**
+ * Classe Maitre
+ * Classe fille de la classe Pion. Ce pion a des caractéristiques différentes.
+ */
 public class Maitre extends Pion{
 
     /**

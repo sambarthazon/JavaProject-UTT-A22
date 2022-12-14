@@ -22,6 +22,9 @@ public class PreSet{
         Joueur joueur1 = new Joueur(partie, NOM_JOUEUR1);
         Joueur joueur2 = new Joueur(partie, NOM_JOUEUR2);
 
+        joueur1.setEquipe(NomEquipe.A2I);
+        joueur2.setEquipe(NomEquipe.ISI);
+
         //Création des "Etudiants" alias "Ei".
         for(int i = 1; i < 16; i++){
             Pion etudiantJoueur1 = new Etudiant(joueur1, "E"+i);

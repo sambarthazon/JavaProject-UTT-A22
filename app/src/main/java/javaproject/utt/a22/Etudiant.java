@@ -1,5 +1,9 @@
 package javaproject.utt.a22;
 
+/**
+ * Classe Etudiant
+ * Classe fille de la classe Pion. Ce pion a des caractéristiques différentes.
+ */
 public class Etudiant extends Pion{
 
     /**

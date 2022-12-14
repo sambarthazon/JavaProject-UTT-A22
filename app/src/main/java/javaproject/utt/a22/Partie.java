@@ -853,11 +853,11 @@ public class Partie {
             //Si un des joueurs a 3 zones ou plus, la partie se termine sinon une trêve est déclenchée
             if(nbZoneControleeJoueur1 >= 3){
                 this.status = StatusPartie.Terminee;
-                System.out.println("L'équipe " + this.arrayJoueur.get(0).getEquipe() + " a gagné.");
+                System.out.println("L'équipe " + this.arrayJoueur.get(0).getEquipe() + " a gagné (" + this.arrayJoueur.get(0) + ").");
                 break;
             } else if(nbZoneControleeJoueur2 >= 3){
                 this.status = StatusPartie.Terminee;
-                System.out.println("L'équipe " + this.arrayJoueur.get(1).getEquipe() + " a gagné.");
+                System.out.println("L'équipe " + this.arrayJoueur.get(1).getEquipe() + " a gagné (" + this.arrayJoueur.get(1) + ").");
                 break;
             } else{
                 this.status = StatusPartie.Treve;

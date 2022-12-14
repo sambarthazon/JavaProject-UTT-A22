@@ -1,15 +1,19 @@
 package javaproject.utt.a22;
 
+/**
+ * Classe Elite
+ * Classe fille de la classe Pion. Ce pion a des caractéristiques différentes.
+ */
 public class Elite extends Pion{
 
     /**
      * Valeur minimale de la dexterite d'un Etudiant d'Elite.
      */
-    private int minDexterite = 1;
+    private final int minDexterite = 1;
     /**
      * Valeur maximal de la dexterite d'un Etudiant d'Elite.
      */
-    private int maxDexterite = 10;
+    private final int maxDexterite = 10;
 
     /**
      * Valeur minimale de la force d'un Etudiant d'Elite.
